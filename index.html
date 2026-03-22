@@ -872,7 +872,15 @@ You can also paste a suspicious link, phone number, or describe what someone sai
   let storedFileType = null;
   let allNews        = [];
   let wsConn         = null;
-  const API_BASE     = 'http://127.0.0.1:8000';
+  // Smart backend URL detection
+  const API_BASE = (() => {
+    const h = window.location.hostname;
+    if (h === '127.0.0.1' || h === 'localhost') {
+      return 'http://127.0.0.1:8000';  // Local development
+    }
+    // On Render or any deployed server — same origin, no port
+    return window.location.protocol + '//' + window.location.hostname;
+  })();
 
   /* ─────────────────────────────────────────────────────────────────────
      VIEW MANAGEMENT
@@ -1454,7 +1462,11 @@ You can also paste a suspicious link, phone number, or describe what someone sai
      NEW: WEBSOCKET — real-time push notifications
   ──────────────────────────────────────────────────────────────────────── */
   function connectWebSocket() {
-    const wsUrl = API_BASE.replace('http://', 'ws://').replace('https://', 'wss://');
+    // Build correct WebSocket URL from current page location
+    const wsProto = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+    const wsHost  = window.location.hostname;
+    const wsPort  = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') ? ':8000' : '';
+    const wsUrl   = wsProto + wsHost + wsPort;
     try {
       wsConn = new WebSocket(`${wsUrl}/ws/notifications`);
 
