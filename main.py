@@ -1666,7 +1666,10 @@ async def websocket_notifications(websocket: WebSocket):
 # ==============================================================================
 
 @app.get("/",include_in_schema=False)
-async def ui(): return FileResponse("index.html")
+async def ui():
+    # Use absolute path so it works both locally and on Render
+    html_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "index.html")
+    return FileResponse(html_path)
 
 @app.post("/analyze",response_model=ScanOutput,tags=["Analysis"])
 async def scan_evidence(
