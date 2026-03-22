@@ -1,0 +1,112 @@
+00:05:03 | INFO     | Database ready.
+00:05:10 | INFO     | [WS] Client connected. Total: 1
+00:05:11 | INFO     | [WS] Client disconnected. Total: 0
+00:05:11 | INFO     | [WS] Client connected. Total: 1
+00:05:48 | INFO     | [SCAN] SN-57579B8C
+00:05:50 | INFO     | [VISION] The image presents a detailed diagram illustrating the components and interactio...
+00:05:50 | INFO     | [AI] Sending to Groq...
+00:05:50 | INFO     | [AI] Done.
+00:05:50 | INFO     | [SCAN] SN-57579B8C done 2.04s | HIGH 52%
+00:05:50 | INFO     | [NEWS] Starting auto news fetch...
+00:05:53 | WARNING  | [NEWS] Failed https://cybercrime.gov.in: HTTPSConnectionPool(host='cybercrime.gov.in', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1000)')))
+00:05:53 | INFO     | [NEWS] Processed https://www.rbi.org.in/scripts/Notifications.aspx — 0 items saved
+00:05:54 | INFO     | [NEWS] Processed https://www.cert-in.org.in — 0 items saved
+00:05:54 | INFO     | [NEWS] Processed https://pib.gov.in — 0 items saved
+00:06:57 | INFO     | [SCAN] SN-EE3BF5D9
+00:06:58 | INFO     | [VISION] The image presents a detailed diagram illustrating the components and interactio...
+00:06:58 | INFO     | [AI] Sending to Groq...
+00:06:59 | INFO     | [AI] Done.
+00:06:59 | INFO     | [SCAN] SN-EE3BF5D9 done 2.13s | HIGH 52%
+00:13:19 | INFO     | [WS] Client disconnected. Total: 0
+00:13:19 | INFO     | [WS] Client connected. Total: 1
+00:13:53 | INFO     | [WS] Client disconnected. Total: 0
+00:13:56 | INFO     | Database ready.
+00:13:58 | INFO     | [WS] Client connected. Total: 1
+00:14:01 | INFO     | [WS] Client disconnected. Total: 0
+00:14:01 | INFO     | [WS] Client connected. Total: 1
+00:14:04 | INFO     | [WS] Client disconnected. Total: 0
+00:14:04 | INFO     | [WS] Client connected. Total: 1
+00:14:05 | INFO     | [WS] Client disconnected. Total: 0
+00:14:06 | INFO     | [WS] Client connected. Total: 1
+00:14:06 | INFO     | [WS] Client connected. Total: 2
+00:14:06 | INFO     | [WS] Client disconnected. Total: 1
+00:14:06 | INFO     | [WS] Client disconnected. Total: 0
+00:14:07 | INFO     | [WS] Client connected. Total: 1
+00:14:07 | INFO     | [WS] Client disconnected. Total: 0
+00:14:07 | INFO     | [WS] Client connected. Total: 1
+00:14:16 | INFO     | [SCAN] SN-86878E43
+00:14:17 | INFO     | [VISION] The image presents a detailed diagram illustrating the components and interactio...
+00:14:17 | INFO     | [AI] Sending to Groq...
+00:14:18 | INFO     | [AI] Done.
+00:14:18 | INFO     | [SCAN] SN-86878E43 done 1.8s | LOW 10%
+00:14:18 | INFO     | [NEWS] Starting auto news fetch...
+00:14:18 | WARNING  | [NEWS] Failed https://cybercrime.gov.in: HTTPSConnectionPool(host='cybercrime.gov.in', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1000)')))
+00:14:19 | INFO     | [NEWS] Processed https://www.rbi.org.in/scripts/Notifications.aspx — 0 items saved
+00:14:19 | INFO     | [NEWS] Processed https://www.cert-in.org.in — 0 items saved
+00:14:19 | INFO     | [NEWS] Processed https://pib.gov.in — 0 items saved
+00:15:21 | INFO     | [SCAN] SN-18961A2B
+00:15:24 | INFO     | [VISION] The image presents a detailed diagram illustrating the components and interactio...
+00:15:24 | INFO     | [AI] Sending to Groq...
+00:15:24 | INFO     | [AI] Done.
+00:15:24 | INFO     | [SCAN] SN-18961A2B done 2.71s | MODERATE 50%
+00:20:10 | INFO     | [WS] Client disconnected. Total: 0
+00:20:14 | INFO     | Database ready.
+00:20:15 | INFO     | [WS] Client connected. Total: 1
+00:20:17 | INFO     | [WS] Client disconnected. Total: 0
+00:20:18 | INFO     | [WS] Client connected. Total: 1
+00:21:04 | INFO     | [SCAN] SN-AEF9082A
+00:21:04 | INFO     | [AI] Sending to Groq...
+00:21:05 | INFO     | [AI] Done.
+00:21:05 | INFO     | [SCAN] SN-AEF9082A done 1.02s | CRITICAL 99%
+00:21:05 | INFO     | [NEWS] Starting auto news fetch...
+00:21:05 | WARNING  | [NEWS] Failed https://cybercrime.gov.in: HTTPSConnectionPool(host='cybercrime.gov.in', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1000)')))
+00:21:06 | INFO     | [NEWS] Processed https://www.rbi.org.in/scripts/Notifications.aspx — 0 items saved
+00:21:07 | INFO     | [NEWS] Processed https://www.cert-in.org.in — 0 items saved
+00:21:07 | INFO     | [NEWS] Processed https://pib.gov.in — 0 items saved
+00:21:36 | INFO     | [SCAN] SN-FA9FD2F3
+00:21:36 | INFO     | [AI] Sending to Groq...
+00:21:37 | INFO     | [AI] Done.
+00:21:37 | INFO     | [SCAN] SN-FA9FD2F3 done 0.87s | CRITICAL 99%
+00:26:21 | INFO     | [WS] Client disconnected. Total: 0
+00:26:22 | INFO     | [WS] Client connected. Total: 1
+00:26:28 | INFO     | [WS] Client disconnected. Total: 0
+00:26:41 | INFO     | Database ready.
+00:26:41 | INFO     | [WS] Client connected. Total: 1
+00:27:13 | INFO     | [SCAN] SN-FDA353BB
+00:27:13 | INFO     | [AI] Sending to Groq...
+00:27:13 | INFO     | [AI] Done.
+00:27:13 | INFO     | [SCAN] SN-FDA353BB done 0.62s | CRITICAL 90%
+00:27:13 | INFO     | [NEWS] Starting auto news fetch...
+00:27:15 | WARNING  | [NEWS] Failed https://cybercrime.gov.in: HTTPSConnectionPool(host='cybercrime.gov.in', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1000)')))
+00:27:15 | INFO     | [NEWS] Processed https://www.rbi.org.in/scripts/Notifications.aspx — 0 items saved
+00:27:15 | INFO     | [NEWS] Processed https://www.cert-in.org.in — 0 items saved
+00:27:16 | INFO     | [NEWS] Processed https://pib.gov.in — 0 items saved
+00:32:41 | INFO     | [WS] Client disconnected. Total: 0
+00:32:42 | INFO     | [WS] Client connected. Total: 1
+00:32:48 | INFO     | [WS] Client disconnected. Total: 0
+00:32:48 | INFO     | [WS] Client connected. Total: 1
+00:33:25 | INFO     | [SCAN] SN-3918F18A
+00:33:25 | INFO     | [AI] Sending to Groq...
+00:33:26 | INFO     | [AI] Done.
+00:33:26 | INFO     | [SCAN] SN-3918F18A done 1.04s | CRITICAL 95%
+00:42:19 | INFO     | [WS] Client disconnected. Total: 0
+10:54:57 | INFO     | [WS] Client connected. Total: 1
+10:55:37 | INFO     | [WS] Client disconnected. Total: 0
+10:56:54 | INFO     | Database ready.
+10:56:54 | INFO     | [WS] Client connected. Total: 1
+10:57:16 | INFO     | [WS] Client disconnected. Total: 0
+10:57:16 | INFO     | [WS] Client connected. Total: 1
+10:57:24 | INFO     | [SCAN] SN-1E41F3F6
+10:57:24 | INFO     | [AI] Sending to Groq...
+10:57:25 | INFO     | [AI] Done.
+10:57:25 | INFO     | [SCAN] SN-1E41F3F6 done 0.77s | CRITICAL 95%
+10:57:25 | INFO     | [NEWS] Starting auto news fetch...
+10:57:25 | WARNING  | [NEWS] Failed https://cybercrime.gov.in: HTTPSConnectionPool(host='cybercrime.gov.in', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1000)')))
+10:57:25 | INFO     | [NEWS] Processed https://www.rbi.org.in/scripts/Notifications.aspx — 0 items saved
+10:57:26 | INFO     | [NEWS] Processed https://www.cert-in.org.in — 0 items saved
+10:57:29 | INFO     | [NEWS] Processed https://pib.gov.in — 0 items saved
+10:58:29 | WARNING  | [NEWS] Failed https://cybercrime.gov.in: HTTPSConnectionPool(host='cybercrime.gov.in', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1000)')))
+10:58:30 | INFO     | [NEWS] Processed https://www.rbi.org.in/scripts/Notifications.aspx — 0 items saved
+10:58:30 | INFO     | [NEWS] Processed https://www.cert-in.org.in — 0 items saved
+10:58:30 | INFO     | [NEWS] Processed https://pib.gov.in — 0 items saved
+11:00:49 | INFO     | [WS] Client disconnected. Total: 0

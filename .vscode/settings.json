@@ -1,0 +1,13 @@
+{
+    "liveServer.settings.port": 5500,
+  "liveServer.settings.NoBrowser": false,
+  "liveServer.settings.donotShowInfoMsg": true,
+  "liveServer.settings.donotVerifyTags": true,
+  "liveServer.settings.ignoreFiles": [
+    ".vscode/**",
+    "**/*.py",
+    "**/*.db",
+    "**/*.log",
+    "sentinel_vault/**"
+  ]
+}

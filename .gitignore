@@ -1,0 +1,26 @@
+# ── Secrets — NEVER push these ──────────────────────────────
+.env
+.env.local
+.env.production
+*.key
+secrets.txt
+
+# ── Python cache ─────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ── Sentinel vault (local data) ──────────────────────────────
+sentinel_vault/
+*.db
+*.log
+exports/
+
+# ── OS files ─────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── VS Code ──────────────────────────────────────────────────
+.vscode/settings.json

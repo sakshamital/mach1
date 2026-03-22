@@ -1,0 +1,72 @@
+2026-03-21 20:46:51 | INFO     | SENTINEL-CORE | Sentinel Kernel booting up...
+2026-03-21 20:46:51 | INFO     | SENTINEL-CORE | Forensic database initialized.
+2026-03-21 20:47:35 | INFO     | SENTINEL-CORE | [SCAN] Incoming investigation: SN-F5D6FCFD
+2026-03-21 20:47:35 | ERROR    | SENTINEL-CORE | [OCR] Pipeline failure: tesseract is not installed or it's not in your PATH. See README file for more information.
+2026-03-21 20:53:28 | INFO     | SENTINEL-CORE | [SCAN] Incoming investigation: SN-5276A131
+2026-03-21 20:53:28 | ERROR    | SENTINEL-CORE | [OCR] Pipeline failure: tesseract is not installed or it's not in your PATH. See README file for more information.
+2026-03-21 20:59:20 | INFO     | SENTINEL-CORE | [SCAN] Incoming investigation: SN-A6CC99B6
+2026-03-21 20:59:20 | ERROR    | SENTINEL-CORE | [OCR] Pipeline failure: tesseract is not installed or it's not in your PATH. See README file for more information.
+2026-03-21 21:12:11 | INFO     | SENTINEL-CORE | [SCAN] Incoming investigation: SN-9E122778
+2026-03-21 21:12:11 | ERROR    | SENTINEL-CORE | [OCR] Pipeline failure: tesseract is not installed or it's not in your PATH. See README file for more information.
+2026-03-21 21:15:25 | INFO     | SENTINEL-CORE | [SCAN] Incoming investigation: SN-540F1DB2
+2026-03-21 21:15:25 | ERROR    | SENTINEL-CORE | [OCR] Pipeline failure: tesseract is not installed or it's not in your PATH. See README file for more information.
+2026-03-21 21:20:06 | INFO     | SENTINEL-CORE | Sentinel Kernel booting up...
+2026-03-21 21:20:06 | INFO     | SENTINEL-CORE | Forensic database initialized.
+2026-03-21 21:20:25 | INFO     | SENTINEL-CORE | [SCAN] Incoming investigation: SN-9B998A67
+2026-03-21 21:20:25 | ERROR    | SENTINEL-CORE | [OCR] Pipeline failure: tesseract is not installed or it's not in your PATH. See README file for more information.
+2026-03-21 21:20:25 | WARNING  | SENTINEL-CORE | [OCR] No text extracted from Screenshot 2025-11-18 003951.png — proceeding with image note.
+2026-03-21 21:20:25 | INFO     | SENTINEL-CORE | [AI] Sending evidence to Ollama (llama3.2:3b)...
+2026-03-21 21:21:34 | INFO     | SENTINEL-CORE | [AI] Analysis completed successfully.
+2026-03-21 21:21:34 | INFO     | SENTINEL-CORE | [SCAN] SN-9B998A67 completed in 68.67s | Risk: 10% (LOW)
+2026-03-21 21:21:34 | INFO     | SENTINEL-CORE | [DB] Scan SN-9B998A67 persisted successfully.
+2026-03-21 21:30:24 | INFO     | SENTINEL-CORE | [SCAN] Incoming investigation: SN-02F0F014
+2026-03-21 21:30:24 | ERROR    | SENTINEL-CORE | [OCR] Pipeline failure: tesseract is not installed or it's not in your PATH. See README file for more information.
+2026-03-21 21:30:24 | WARNING  | SENTINEL-CORE | [OCR] No text extracted from Screenshot 2025-11-18 003951.png — proceeding with image note.
+2026-03-21 21:30:24 | INFO     | SENTINEL-CORE | [AI] Sending evidence to Ollama (llama3.2:3b)...
+2026-03-21 21:31:30 | INFO     | SENTINEL-CORE | [AI] Analysis completed successfully.
+2026-03-21 21:31:30 | INFO     | SENTINEL-CORE | [SCAN] SN-02F0F014 completed in 65.23s | Risk: 10% (LOW)
+2026-03-21 21:31:34 | INFO     | SENTINEL-CORE | [DB] Scan SN-02F0F014 persisted successfully.
+2026-03-21 21:32:30 | INFO     | SENTINEL-CORE | Sentinel Kernel booting up...
+2026-03-21 21:32:30 | INFO     | SENTINEL-CORE | Forensic database initialized.
+2026-03-21 21:32:46 | INFO     | SENTINEL-CORE | [SCAN] Incoming investigation: SN-538961A0
+2026-03-21 21:32:46 | ERROR    | SENTINEL-CORE | [OCR] Pipeline failure: tesseract is not installed or it's not in your PATH. See README file for more information.
+2026-03-21 21:32:46 | WARNING  | SENTINEL-CORE | [OCR] No text extracted from Screenshot 2025-11-18 104232.png — proceeding with image note.
+2026-03-21 21:32:46 | INFO     | SENTINEL-CORE | [AI] Sending evidence to Ollama (llama3.2:3b)...
+2026-03-21 21:34:04 | INFO     | SENTINEL-CORE | [AI] Analysis completed successfully.
+2026-03-21 21:34:04 | INFO     | SENTINEL-CORE | [SCAN] SN-538961A0 completed in 78.21s | Risk: 10% (LOW)
+2026-03-21 21:34:04 | INFO     | SENTINEL-CORE | [DB] Scan SN-538961A0 persisted successfully.
+2026-03-21 21:36:14 | INFO     | SENTINEL-CORE | Sentinel Kernel booting up...
+2026-03-21 21:36:14 | INFO     | SENTINEL-CORE | Forensic database initialized.
+2026-03-21 21:36:32 | INFO     | SENTINEL-CORE | [SCAN] Incoming investigation: SN-4973E850
+2026-03-21 21:36:32 | ERROR    | SENTINEL-CORE | [OCR] Pipeline failure: tesseract is not installed or it's not in your PATH. See README file for more information.
+2026-03-21 21:36:32 | WARNING  | SENTINEL-CORE | [OCR] No text extracted from Screenshot 2025-11-17 234245.png — proceeding with image note.
+2026-03-21 21:36:32 | INFO     | SENTINEL-CORE | [AI] Sending evidence to Ollama (llama3.2:3b)...
+2026-03-21 21:37:08 | INFO     | SENTINEL-CORE | [AI] Analysis completed successfully.
+2026-03-21 21:37:08 | INFO     | SENTINEL-CORE | [SCAN] SN-4973E850 completed in 35.9s | Risk: 10% (LOW)
+2026-03-21 21:37:08 | INFO     | SENTINEL-CORE | [DB] Scan SN-4973E850 persisted successfully.
+2026-03-21 22:00:23 | INFO     | SENTINEL-CORE | Sentinel Kernel booting up...
+2026-03-21 22:00:23 | INFO     | SENTINEL-CORE | Forensic database initialized.
+2026-03-21 22:00:39 | INFO     | SENTINEL-CORE | [SCAN] Incoming investigation: SN-A82EB0BA
+2026-03-21 22:00:39 | ERROR    | SENTINEL-CORE | [OCR] Pipeline failure: tesseract is not installed or it's not in your PATH. See README file for more information.
+2026-03-21 22:00:39 | WARNING  | SENTINEL-CORE | [OCR] No text extracted from Screenshot 2025-12-01 170527.png — proceeding with image note.
+2026-03-21 22:00:39 | INFO     | SENTINEL-CORE | [AI] Sending to Groq (llama-3.1-8b-instant)...
+2026-03-21 22:00:40 | INFO     | SENTINEL-CORE | [AI] Groq analysis completed successfully.
+2026-03-21 22:00:40 | INFO     | SENTINEL-CORE | [SCAN] SN-A82EB0BA completed in 0.68s | Risk: 80% (CRITICAL)
+2026-03-21 22:00:40 | INFO     | SENTINEL-CORE | [DB] Scan SN-A82EB0BA persisted successfully.
+2026-03-21 22:01:03 | INFO     | SENTINEL-CORE | [SCAN] Incoming investigation: SN-ED82FD94
+2026-03-21 22:01:04 | ERROR    | SENTINEL-CORE | [OCR] Pipeline failure: tesseract is not installed or it's not in your PATH. See README file for more information.
+2026-03-21 22:01:04 | WARNING  | SENTINEL-CORE | [OCR] No text extracted from Screenshot 2025-11-18 104232.png — proceeding with image note.
+2026-03-21 22:01:04 | INFO     | SENTINEL-CORE | [AI] Sending to Groq (llama-3.1-8b-instant)...
+2026-03-21 22:01:04 | INFO     | SENTINEL-CORE | [AI] Groq analysis completed successfully.
+2026-03-21 22:01:04 | INFO     | SENTINEL-CORE | [SCAN] SN-ED82FD94 completed in 0.86s | Risk: 80% (CRITICAL)
+2026-03-21 22:01:04 | INFO     | SENTINEL-CORE | [DB] Scan SN-ED82FD94 persisted successfully.
+2026-03-21 22:10:57 | INFO     | SENTINEL-CORE | Sentinel Kernel booting up...
+2026-03-21 22:10:57 | INFO     | SENTINEL-CORE | Forensic database initialized.
+2026-03-21 22:11:08 | INFO     | SENTINEL-CORE | [SCAN] Incoming investigation: SN-71261F85
+2026-03-21 22:11:08 | INFO     | SENTINEL-CORE | [VISION] Sending image to Groq Vision model...
+2026-03-21 22:11:10 | INFO     | SENTINEL-CORE | [VISION] Image described: The image presents a detailed diagram illustrating the components and interactions involved in a TEL...
+2026-03-21 22:11:10 | INFO     | SENTINEL-CORE | [SCAN] Image understood via Groq Vision.
+2026-03-21 22:11:10 | INFO     | SENTINEL-CORE | [AI] Sending to Groq (llama-3.1-8b-instant)...
+2026-03-21 22:11:10 | INFO     | SENTINEL-CORE | [AI] Groq analysis completed successfully.
+2026-03-21 22:11:10 | INFO     | SENTINEL-CORE | [SCAN] SN-71261F85 completed in 1.85s | Risk: 10% (LOW)
+2026-03-21 22:11:10 | INFO     | SENTINEL-CORE | [DB] Scan SN-71261F85 persisted successfully.
