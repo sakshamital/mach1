@@ -1982,6 +1982,19 @@ async def health():
 # ==============================================================================
 
 if __name__ == "__main__":
+    import os
+    # Render provides the PORT as an environment variable
+    port = int(os.environ.get("PORT", 8000)) 
+    
+    print(f"--- SENTINEL v8.5.0 DEPLOYED ON PORT {port} ---")
+    
+    uvicorn.run(
+        "main:app", 
+        host="0.0.0.0", 
+        port=port, 
+        reload=False, 
+        workers=2 # Reduced workers for Render's free tier RAM limits
+    )
     print("""
 ╔══════════════════════════════════════════════════════════════════════╗
 ║     🛡️   YOUR SENTINEL v7.0 — COMPLETE INTEGRATED EDITION          ║
