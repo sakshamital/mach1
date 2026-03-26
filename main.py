@@ -2031,5 +2031,7 @@ if __name__ == "__main__":
 ║  HELPLINE : 1930  |  cybercrime.gov.in                               ║
 ╚══════════════════════════════════════════════════════════════════════╝
     """)
-    port = int(os.environ.get('PORT', 8000))
-    uvicorn.run(app, host='0.0.0.0', port=port, log_level='info')
+def run_server():
+    import os
+    port = int(os.environ.get("PORT", 8000)) # Get port from Render
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
