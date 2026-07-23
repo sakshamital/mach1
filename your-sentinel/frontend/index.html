@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Sentinel v8.0 — AI Scam Detection for India</title>
+  <meta name="description" content="Free AI-powered scam and cybercrime detection for Indian citizens. Check any suspicious message or image instantly.">
   <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
@@ -24,7 +25,7 @@
         <span id="status-label">Checking…</span>
       </div>
       <div class="notif-wrap">
-        <button class="notif-bell" id="notif-bell" aria-label="Notifications">🔔</button>
+        <button class="notif-bell" id="notif-bell" aria-label="Notifications" onclick="Sentinel.toggleNotifPanel()">🔔</button>
         <span class="notif-badge" id="notif-badge" hidden>0</span>
         <div class="notif-panel" id="notif-panel">
           <div class="notif-panel-head">
@@ -45,7 +46,7 @@
     <!-- SCAN VIEW -->
     <section id="view-scan" class="view active">
       <div class="hero">
-        <span class="eyebrow">v8.0 · Multi-AI · Free for every Indian</span>
+        <span class="eyebrow animate-eyebrow">v8.0 · Multi-AI · Free for every Indian</span>
         <h1>Detect scams before they steal your money</h1>
         <p class="subtitle">Paste a suspicious SMS, WhatsApp message, or upload a screenshot. Four AI models analyze it in seconds.</p>
       </div>
@@ -53,9 +54,13 @@
       <div class="scan-panel">
         <textarea class="scan-textarea" id="scan-text" placeholder="Paste suspicious message here… (Hindi, English, Hinglish supported)"></textarea>
         <label class="upload-zone" id="upload-zone">
-          <input type="file" id="scan-file" accept="image/*">
+          <input type="file" id="scan-file" accept="image/*" style="display:none;">
           <p>📷 Drop screenshot or click to upload (WhatsApp, SMS, any image)</p>
           <div class="upload-preview" id="upload-preview"></div>
+          <div class="file-preview-bar" id="file-preview-bar" style="margin-top:0.5rem; display:none; justify-content:center; align-items:center; flex-direction:column; gap:0.5rem;">
+            <img id="upload-thumbnail" style="max-height:120px; border-radius: var(--radius-sm); box-shadow: var(--shadow); border: 1px solid var(--border);" />
+            <button type="button" class="btn-secondary" id="btn-clear-file" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Clear Image</button>
+          </div>
         </label>
         <button type="button" class="btn-primary" id="btn-analyze">Analyze Now</button>
       </div>
@@ -114,9 +119,12 @@
 
     <!-- STATS VIEW -->
     <section id="view-stats" class="view">
-      <h1 style="font-family:var(--font-head);margin-bottom:1.5rem">Dashboard</h1>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+        <h1 style="font-family:var(--font-head);margin:0;">Dashboard</h1>
+        <button type="button" class="btn-secondary" id="btn-refresh-stats">🔄 Refresh Stats</button>
+      </div>
       <div class="stats-grid" id="stats-grid"></div>
-      <div class="card">
+      <div class="card" style="margin-top:1.5rem;">
         <h3>Top Scam Categories</h3>
         <ul id="top-categories"></ul>
       </div>
@@ -163,6 +171,7 @@
 
     let lastScanId = null;
     let selectedFile = null;
+    let thumbnailObjUrl = null;
 
     function initPipelineSteps() {
       const ul = document.getElementById('pipeline-steps');
@@ -280,12 +289,16 @@
       } finally {
         document.getElementById('loading-state').classList.remove('active');
         btn.disabled = false;
+        btn.style.opacity = '1';
       }
     });
 
     const uploadZone = document.getElementById('upload-zone');
     const fileInput = document.getElementById('scan-file');
-    uploadZone.addEventListener('click', () => fileInput.click());
+    uploadZone.addEventListener('click', (e) => {
+      if (e.target.id === 'btn-clear-file') return;
+      fileInput.click();
+    });
     uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
     uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
     uploadZone.addEventListener('drop', e => {
@@ -294,9 +307,38 @@
       if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
     });
     fileInput.addEventListener('change', () => { if (fileInput.files[0]) setFile(fileInput.files[0]); });
+
     function setFile(f) {
+      if (thumbnailObjUrl) {
+        window.URL.revokeObjectURL(thumbnailObjUrl);
+      }
       selectedFile = f;
       document.getElementById('upload-preview').textContent = 'Selected: ' + f.name;
+      
+      // 2. Image upload preview with object URL
+      const bar = document.getElementById('file-preview-bar');
+      const thumb = document.getElementById('upload-thumbnail');
+      thumbnailObjUrl = window.URL.createObjectURL(f);
+      thumb.src = thumbnailObjUrl;
+      bar.style.display = 'flex';
+    }
+
+    document.getElementById('btn-clear-file').addEventListener('click', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      clearFile();
+    });
+
+    function clearFile() {
+      if (thumbnailObjUrl) {
+        window.URL.revokeObjectURL(thumbnailObjUrl);
+        thumbnailObjUrl = null;
+      }
+      selectedFile = null;
+      fileInput.value = '';
+      document.getElementById('upload-preview').textContent = '';
+      document.getElementById('file-preview-bar').style.display = 'none';
+      document.getElementById('upload-thumbnail').src = '';
     }
 
     document.getElementById('btn-confirm-scam').addEventListener('click', async () => {
@@ -322,13 +364,35 @@
         document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
         const view = tab.dataset.view;
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.getElementById('view-' + view).classList.add('active');
+        
+        // 8. Add subtle fade-in transitions when switching views
+        document.querySelectorAll('.view').forEach(v => {
+          v.classList.remove('active', 'fade-in');
+        });
+        const currentView = document.getElementById('view-' + view);
+        currentView.classList.add('active');
+        // trigger reflow
+        void currentView.offsetWidth;
+        currentView.classList.add('fade-in');
+
         if (view === 'vault') loadVault();
         if (view === 'stats') loadStats();
         if (view === 'news') loadNews();
       });
     });
+
+    // 5. Delete scan implementation inside Vault view
+    async function deleteScan(scanId, event) {
+      if (event) event.stopPropagation();
+      if (!confirm(`Are you sure you want to delete scan ${scanId}?`)) return;
+      try {
+        await Sentinel.api(`/scan/${scanId}`, { method: 'DELETE' });
+        Sentinel.showToast('Deleted', `Scan ${scanId} removed from vault.`, 'LOW');
+        loadVault();
+      } catch (e) {
+        Sentinel.showToast('Delete Failed', e.message, 'CRITICAL');
+      }
+    }
 
     async function loadVault() {
       const list = document.getElementById('vault-list');
@@ -340,15 +404,19 @@
         }
         list.innerHTML = res.data.map(s => `
           <li class="vault-item" data-id="${Sentinel.esc(s.scan_id)}">
-            <div>
+            <div style="flex:1;">
               <strong class="mono">${Sentinel.esc(s.scan_id)}</strong>
               <div class="vault-meta">${Sentinel.fmtTime(s.created_at)} · ${Sentinel.esc(s.category || '')}</div>
             </div>
-            <span class="risk-pill ${s.risk_level}">${s.risk_level} ${Math.round(s.risk_score || 0)}%</span>
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <span class="risk-pill ${s.risk_level}">${s.risk_level} ${Math.round(s.risk_score || 0)}%</span>
+              <button type="button" class="btn-delete" onclick="deleteScan('${Sentinel.esc(s.scan_id)}', event)" aria-label="Delete scan">🗑</button>
+            </div>
           </li>
         `).join('');
         list.querySelectorAll('.vault-item').forEach(el => {
-          el.addEventListener('click', async () => {
+          el.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('btn-delete')) return;
             const id = el.dataset.id;
             const scan = await Sentinel.api('/scan/' + id);
             document.querySelector('[data-view="scan"]').click();
@@ -386,6 +454,12 @@
         grid.innerHTML = '<p class="empty-state">Stats unavailable</p>';
       }
     }
+
+    // 6. Stats manual refresh button wiring
+    document.getElementById('btn-refresh-stats').addEventListener('click', () => {
+      loadStats();
+      Sentinel.showToast('Refreshing Dashboard', 'Stats successfully updated.', 'LOW');
+    });
 
     let newsSeverityFilter = '';
     async function loadNews() {
@@ -447,11 +521,14 @@
       });
     });
 
+    // 7. News ticker seamless duplication loops
     async function loadTicker() {
       try {
         const res = await Sentinel.api('/news/ticker');
         const items = res.data || [];
-        const html = items.concat(items).map(i =>
+        // Duplicate items list for continuous loops
+        const duplicated = items.concat(items).concat(items);
+        const html = duplicated.map(i =>
           `<span class="ticker-item"><span class="notif-sev ${Sentinel.severityDot(i.severity)}"></span>${Sentinel.esc(i.title)}</span>`
         ).join('');
         document.getElementById('ticker-track').innerHTML = html || '<span class="ticker-item">Stay safe — Report scams at 1930 | cybercrime.gov.in</span>';
@@ -460,6 +537,14 @@
           '<span class="ticker-item">Your Sentinel — Free AI scam protection for India</span>';
       }
     }
+
+    // Initialize triggers on window load
+    window.addEventListener('load', () => {
+      // 3. Immediate health check call on load
+      if (window.Sentinel && typeof window.Sentinel.checkHealth === 'function') {
+        window.Sentinel.checkHealth();
+      }
+    });
 
     initPipelineSteps();
     loadTicker();

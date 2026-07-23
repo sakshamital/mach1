@@ -1,24 +1,24 @@
 /**
  * YOUR SENTINEL v8.0 — Shared frontend utilities
- * API_BASE detection, WebSocket, push toasts, notification badge, helpers
+ * API_BASE detection, WebSocket, push toasts, notification panel dropdown, health checks
  */
 
 (function (global) {
   'use strict';
 
+  // 1. API_BASE auto-detection
   const isLocal =
     window.location.hostname === 'localhost' ||
     window.location.hostname === '127.0.0.1';
   const API_BASE = isLocal
-    ? 'http://localhost:8000'
-    : window.location.origin;
-
-  const WS_URL = (API_BASE.replace(/^http/, 'ws')) + '/ws/notifications';
+    ? 'http://127.0.0.1:8000'
+    : window.location.protocol + '//' + window.location.hostname;
 
   let ws = null;
-  let wsReconnectTimer = null;
   let unreadCount = 0;
+  let wsPingInterval = null;
 
+  // HTML escaping utility
   function esc(str) {
     if (str == null) return '';
     const d = document.createElement('div');
@@ -26,10 +26,11 @@
     return d.innerHTML;
   }
 
-  function fmtTime(iso) {
-    if (!iso) return '';
+  // Format date/time to Indian locale
+  function fmtTime(isoString) {
+    if (!isoString) return '';
     try {
-      const d = new Date(iso);
+      const d = new Date(isoString);
       return d.toLocaleString('en-IN', {
         day: '2-digit',
         month: 'short',
@@ -37,10 +38,11 @@
         minute: '2-digit',
       });
     } catch {
-      return String(iso);
+      return String(isoString);
     }
   }
 
+  // Generic fetch API wrapper
   async function api(path, options = {}) {
     const url = API_BASE + path;
     const res = await fetch(url, options);
@@ -51,6 +53,7 @@
     return res.json();
   }
 
+  // Risk styling classes mapping
   function riskClass(level) {
     const map = {
       LOW: 'risk-low',
@@ -62,6 +65,7 @@
     return map[level] || 'risk-low';
   }
 
+  // Severity dot indicator classes
   function severityDot(sev) {
     const s = (sev || '').toUpperCase();
     if (s === 'CRITICAL') return 'dot-critical';
@@ -70,210 +74,295 @@
     return 'dot-low';
   }
 
-  /* ---- Toast notifications ---- */
-  function showToast(title, message, severity = 'MODERATE') {
-    const container = document.getElementById('toast-container');
-    if (!container) return;
+  // 7. Push sliding toast (bottom-left)
+  function showPushToast(title, message, severity = 'MODERATE') {
+    let container = document.getElementById('push-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'push-container';
+      container.style.position = 'fixed';
+      container.style.bottom = '1.5rem';
+      container.style.left = '1.5rem';
+      container.style.zIndex = '9999';
+      container.style.display = 'flex';
+      container.style.flexDirection = 'column';
+      container.style.gap = '0.5rem';
+      document.body.appendChild(container);
+    }
+
     const toast = document.createElement('div');
     toast.className = `toast toast-${severity.toLowerCase()}`;
-    toast.innerHTML =
-      '<strong>' + esc(title) + '</strong><p>' + esc(message) + '</p>';
+    toast.style.background = 'var(--bg-surface)';
+    toast.style.borderLeft = `4px solid var(--${severity.toLowerCase()})`;
+    toast.style.padding = '0.75rem 1rem';
+    toast.style.borderRadius = 'var(--radius-sm)';
+    toast.style.boxShadow = 'var(--shadow)';
+    toast.style.minWidth = '280px';
+    toast.style.maxWidth = '360px';
+    toast.style.transition = 'all 0.3s ease';
+    toast.style.transform = 'translateX(-120%)';
+
+    toast.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:start;">
+        <strong style="font-size:0.875rem;">${esc(title)}</strong>
+        <span class="notif-sev ${severityDot(severity)}"></span>
+      </div>
+      <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.25rem;">${esc(message)}</p>
+    `;
     container.appendChild(toast);
-    requestAnimationFrame(() => toast.classList.add('show'));
+
+    // Slide in
     setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => toast.remove(), 400);
+      toast.style.transform = 'translateX(0)';
+    }, 50);
+
+    // Auto-remove after 6 seconds
+    setTimeout(() => {
+      toast.style.transform = 'translateX(-120%)';
+      toast.style.opacity = '0';
+      setTimeout(() => toast.remove(), 300);
     }, 6000);
   }
 
-  /* ---- Badge ---- */
-  function updateBadge(count) {
+  // 6. Update badge count and visibility
+  function updateNotifBadge(count) {
     unreadCount = count;
     const badge = document.getElementById('notif-badge');
     if (!badge) return;
+    badge.textContent = count;
     if (count > 0) {
-      badge.textContent = count > 99 ? '99+' : String(count);
-      badge.hidden = false;
+      badge.removeAttribute('hidden');
+      badge.classList.add('show');
     } else {
-      badge.hidden = true;
+      badge.setAttribute('hidden', '');
+      badge.classList.remove('show');
     }
   }
 
-  async function refreshUnreadCount() {
-    try {
-      const res = await api('/notifications/unread-count');
-      updateBadge(res.count || 0);
-    } catch (e) {
-      console.warn('unread count', e);
+  // 2. WebSocket management
+  function connectWebSocket() {
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const hostPort = API_BASE.replace(/^https?:\/\//, '');
+    const wsUrl = `${wsProtocol}//${hostPort}/ws/notifications`;
+
+    console.log(`Connecting WebSocket to: ${wsUrl}`);
+    if (ws) {
+      try { ws.close(); } catch(e) {}
     }
+    
+    ws = new WebSocket(wsUrl);
+
+    ws.onopen = function () {
+      console.log('WebSocket Connection Opened.');
+      // 2. Ping every 20 seconds
+      if (wsPingInterval) clearInterval(wsPingInterval);
+      wsPingInterval = setInterval(() => {
+        if (ws.readyState === WebSocket.OPEN) {
+          ws.send('ping');
+        }
+      }, 20000);
+    };
+
+    ws.onmessage = function (e) {
+      if (e.data === 'pong') return;
+      try {
+        const payload = JSON.parse(e.data);
+        if (payload.event === 'notification' && payload.data) {
+          const d = payload.data;
+          showPushToast(d.title || 'Notification', d.message || '', d.severity || 'MODERATE');
+          updateNotifBadge(unreadCount + 1);
+          
+          const panel = document.getElementById('notif-panel');
+          if (panel && panel.classList.contains('open')) {
+            loadNotifications();
+          }
+        }
+      } catch (err) {
+        console.warn('WS parse error:', err);
+      }
+    };
+
+    ws.onclose = function () {
+      console.warn('WebSocket connection closed. Reconnecting in 5 seconds...');
+      if (wsPingInterval) clearInterval(wsPingInterval);
+      setTimeout(connectWebSocket, 5000);
+    };
+
+    ws.onerror = function (err) {
+      console.error('WebSocket Error:', err);
+    };
   }
 
-  /* ---- Notification panel ---- */
+  // 3. Load notifications into panel
   async function loadNotifications() {
     const list = document.getElementById('notif-list');
     if (!list) return;
     try {
       const res = await api('/notifications?limit=30');
-      list.innerHTML = '';
-      if (!res.data || !res.data.length) {
-        list.innerHTML = '<li class="notif-empty">No notifications yet</li>';
-        return;
+      const items = res.data || [];
+      
+      let unread = 0;
+      if (items.length === 0) {
+        list.innerHTML = '<li class="empty-state" style="padding:1.5rem; text-align:center; color:var(--text-muted); font-size:0.8rem;">No notifications</li>';
+      } else {
+        list.innerHTML = items.map(n => {
+          const isUnread = !n.is_read;
+          if (isUnread) unread++;
+          
+          let icon = 'ℹ️';
+          if (n.severity === 'CRITICAL' || n.severity === 'HIGH') icon = '🚨';
+          else if (n.severity === 'MODERATE') icon = '⚠️';
+          else if (n.is_read) icon = '✅';
+
+          const severityClass = (n.severity || 'MODERATE').toLowerCase();
+          const borderStyle = isUnread ? `style="border-left: 3px solid var(--${severityClass})"` : '';
+
+          return `
+            <li class="notif-item ${isUnread ? 'unread' : ''}" ${borderStyle} onclick="Sentinel.markOneRead('${n.notification_id}', this)">
+              <div style="font-size:1.1rem; margin-top:2px;">${icon}</div>
+              <div class="notif-body">
+                <strong>${esc(n.title)}</strong>
+                <p>${esc(n.message)}</p>
+                <time>${fmtTime(n.created_at)}</time>
+              </div>
+            </li>
+          `;
+        }).join('');
       }
-      res.data.forEach((n) => {
-        const li = document.createElement('li');
-        li.className = 'notif-item' + (n.is_read ? '' : ' unread');
-        li.dataset.id = n.notification_id;
-        li.innerHTML =
-          '<span class="notif-sev ' +
-          severityDot(n.severity) +
-          '"></span>' +
-          '<div class="notif-body">' +
-          '<strong>' +
-          esc(n.title) +
-          '</strong>' +
-          '<p>' +
-          esc(n.message) +
-          '</p>' +
-          '<time>' +
-          fmtTime(n.created_at) +
-          '</time></div>';
-        li.addEventListener('click', () => markOneRead(n.notification_id, li));
-        list.appendChild(li);
-      });
+      
+      // Update unread badge count from the count endpoint for reliability
+      const countRes = await api('/notifications/unread-count');
+      updateNotifBadge(countRes.count ?? unread);
     } catch (e) {
-      list.innerHTML = '<li class="notif-empty">Failed to load</li>';
+      console.warn('Failed to load notifications:', e);
     }
   }
 
-  async function markOneRead(id, el) {
+  // 4. Mark single notification as read
+  async function markOneRead(notifId, element) {
     try {
       await api('/notifications/mark-read', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notification_ids: [id] }),
+        body: JSON.stringify({ notification_ids: [notifId] }),
       });
-      if (el) el.classList.remove('unread');
-      refreshUnreadCount();
+      if (element) {
+        element.classList.remove('unread');
+        element.style.borderLeft = 'none';
+      }
+      const countRes = await api('/notifications/unread-count');
+      updateNotifBadge(countRes.count);
     } catch (e) {
-      console.warn(e);
+      console.warn('Failed to mark notification as read:', e);
     }
   }
 
+  // 5. Mark all read
   async function markAllRead() {
     try {
       await api('/notifications/mark-read', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({}),
+        body: JSON.stringify({ notification_ids: null }),
       });
-      refreshUnreadCount();
-      loadNotifications();
+      await loadNotifications();
+      updateNotifBadge(0);
     } catch (e) {
-      console.warn(e);
+      console.warn('Failed to mark all as read:', e);
     }
   }
 
-  function toggleNotifPanel() {
-    const panel = document.getElementById('notif-panel');
-    if (!panel) return;
-    const open = panel.classList.toggle('open');
-    if (open) loadNotifications();
-  }
-
-  /* ---- WebSocket ---- */
-  function connectWebSocket() {
-    if (ws && ws.readyState === WebSocket.OPEN) return;
-    try {
-      ws = new WebSocket(WS_URL);
-      ws.onopen = () => {
-        console.log('WS connected');
-        if (wsReconnectTimer) {
-          clearInterval(wsReconnectTimer);
-          wsReconnectTimer = null;
-        }
-        setInterval(() => {
-          if (ws && ws.readyState === WebSocket.OPEN) ws.send('ping');
-        }, 25000);
-      };
-      ws.onmessage = (ev) => {
-        if (ev.data === 'pong') return;
-        try {
-          const msg = JSON.parse(ev.data);
-          if (msg.event === 'notification' && msg.data) {
-            showToast(msg.data.title, msg.data.message, msg.data.severity);
-            refreshUnreadCount();
-          }
-        } catch (e) {
-          console.warn('WS parse', e);
-        }
-      };
-      ws.onclose = () => {
-        ws = null;
-        if (!wsReconnectTimer) {
-          wsReconnectTimer = setInterval(connectWebSocket, 5000);
-        }
-      };
-      ws.onerror = () => ws?.close();
-    } catch (e) {
-      console.warn('WS connect failed', e);
-    }
-  }
-
-  /* ---- Health status dot ---- */
+  // 8. Health check system
   async function checkHealth() {
     const dot = document.getElementById('status-dot');
     const label = document.getElementById('status-label');
+    if (!dot || !label) return;
     try {
       const res = await api('/health');
-      if (dot) {
+      if (res && res.success) {
         dot.className = 'status-dot online';
+        const aiStatus = res.ai_status || {};
+        const totalAIs = Object.keys(aiStatus).length || 8;
+        const onlineAIs = Object.values(aiStatus).filter(Boolean).length;
+        label.textContent = `${onlineAIs}/${totalAIs} AI Active`;
+      } else {
+        dot.className = 'status-dot offline';
+        label.textContent = 'Degraded';
       }
-      if (label) label.textContent = res.status === 'healthy' ? 'Online' : 'Degraded';
-    } catch {
-      if (dot) dot.className = 'status-dot offline';
-      if (label) label.textContent = 'Offline';
+    } catch (e) {
+      dot.className = 'status-dot offline';
+      label.textContent = 'Server Offline';
     }
   }
 
-  global.Sentinel = {
+  // Toggle notification panel utility
+  function toggleNotifPanel() {
+    const panel = document.getElementById('notif-panel');
+    if (!panel) return;
+    panel.classList.toggle('open');
+    if (panel.classList.contains('open')) {
+      loadNotifications();
+    }
+  }
+
+  // Standalone Toast notification for alerts (bottom-right stacking)
+  function showToast(title, message, severity = 'MODERATE') {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'toast-container';
+      document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${severity.toLowerCase()}`;
+    toast.innerHTML = `
+      <strong>${esc(title)}</strong>
+      <p>${esc(message)}</p>
+    `;
+    container.appendChild(toast);
+
+    setTimeout(() => {
+      toast.classList.add('visible');
+    }, 50);
+
+    setTimeout(() => {
+      toast.classList.remove('visible');
+      setTimeout(() => toast.remove(), 400);
+    }, 5000);
+  }
+
+  // Export everything onto the global scope so inline scripts can access them
+  const Sentinel = {
     API_BASE,
-    api,
     esc,
     fmtTime,
+    api,
     riskClass,
     severityDot,
+    showPushToast,
     showToast,
-    updateBadge,
-    refreshUnreadCount,
-    loadNotifications,
-    markAllRead,
-    toggleNotifPanel,
+    updateNotifBadge,
     connectWebSocket,
+    loadNotifications,
+    markOneRead,
+    markAllRead,
     checkHealth,
+    toggleNotifPanel
   };
 
+  global.Sentinel = Sentinel;
+
+  // Trigger immediate actions on load
   document.addEventListener('DOMContentLoaded', () => {
-    connectWebSocket();
-    refreshUnreadCount();
     checkHealth();
-    setInterval(checkHealth, 60000);
-
-    const bell = document.getElementById('notif-bell');
-    if (bell) bell.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleNotifPanel();
-    });
-
-    const markAll = document.getElementById('notif-mark-all');
-    if (markAll) markAll.addEventListener('click', markAllRead);
-
-    document.addEventListener('click', (e) => {
-      const panel = document.getElementById('notif-panel');
-      if (panel && panel.classList.contains('open')) {
-        if (!panel.contains(e.target) && e.target.id !== 'notif-bell') {
-          panel.classList.remove('open');
-        }
-      }
-    });
+    connectWebSocket();
+    
+    // Wire global click listener for mark all read if button exists
+    const markAllBtn = document.getElementById('notif-mark-all');
+    if (markAllBtn) {
+      markAllBtn.addEventListener('click', markAllRead);
+    }
   });
+
 })(window);

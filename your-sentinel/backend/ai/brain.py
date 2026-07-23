@@ -8,6 +8,7 @@ Coordinates final unified verdict combining AI 2, AI 3, and local analysis.
 from __future__ import annotations
 
 import hashlib
+import json
 import logging
 import re
 from typing import Any, Dict, List, Optional, Tuple
@@ -314,6 +315,32 @@ class SentinelBrain:
             family, family_score, family_pats = self.detect_family_impersonation(text)
             mutations = self.detect_mutations(text)
             hf = await self.hf.classify(text)
+
+            # FIX #5: community_patterns query and boost calculation
+            community_boost = 0.0
+            from database import db
+            if db.get_pool():
+                try:
+                    patterns = await db.list_community_patterns(limit=250)
+                    text_lower = text.lower()
+                    for p in patterns:
+                        metadata = p.get("metadata") or {}
+                        if isinstance(metadata, str):
+                            try:
+                                metadata = json.loads(metadata)
+                            except Exception:
+                                metadata = {}
+                        verdict = metadata.get("verdict", "SCAM")
+                        if verdict == "SCAM" and p.get("text_sample"):
+                            # Tokenize the pattern text to lowercased alpha keywords of length > 3
+                            keywords = [w.strip().lower() for w in re.findall(r"\w+", p["text_sample"]) if len(w.strip()) > 3]
+                            if keywords and all(k in text_lower for k in keywords):
+                                conf = int(p.get("confirmed_count") or 1)
+                                community_boost += conf * 5.0
+                except Exception as db_exc:
+                    logger.warning("Community pattern query failed in local analysis: %s", db_exc)
+            community_boost = min(community_boost, 25.0)
+
             return {
                 "behaviour": behaviour,
                 "mismatches": mismatches,
@@ -322,6 +349,7 @@ class SentinelBrain:
                 "family_patterns": family_pats,
                 "mutations": mutations,
                 "hf_classification": hf,
+                "community_boost": community_boost,
             }
         except Exception as exc:
             logger.error("run_local_analysis: %s", exc)
@@ -362,6 +390,12 @@ class SentinelBrain:
                 score += float(hf.get("confidence", 0)) * 0.25
                 signals.append("hf_classifier")
 
+            # Add community boost to score computation
+            boost = local.get("community_boost", 0.0)
+            if boost > 0:
+                score += boost
+                signals.append("community_patterns")
+
             if vision:
                 vscore = float(vision.get("risk_score", 0))
                 score += vscore * 0.35
@@ -401,7 +435,7 @@ class SentinelBrain:
                 "verify_mode": verify_mode,
                 "signals": signals,
                 "recommended_actions": actions,
-                "summary": self._build_summary(final_score, verdict, category, mismatches),
+                "summary": self._build_summary(final_score, verdict, category, mismatches, boost),
             }
         except Exception as exc:
             logger.error("compute_unified_verdict: %s", exc)
@@ -453,10 +487,12 @@ class SentinelBrain:
         return actions
 
     def _build_summary(
-        self, score: float, verdict: str, category: str, mismatches: List
+        self, score: float, verdict: str, category: str, mismatches: List, boost: float
     ) -> str:
         parts = [f"Risk score {score}% — Verdict: {verdict}."]
         parts.append(f"Category: {category.replace('_', ' ').title()}.")
         if mismatches:
             parts.append(f"{len(mismatches)} official mismatch(es) detected.")
+        if boost > 0:
+            parts.append(f"Scam match in community database (+{boost}% boost).")
         return " ".join(parts)

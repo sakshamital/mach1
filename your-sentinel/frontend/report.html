@@ -27,6 +27,8 @@
       <span><strong>Category:</strong> <span id="info-category">—</span></span>
     </div>
 
+    <div id="error-container" style="color: var(--critical); margin-bottom: 1.5rem; font-weight: bold; display: none;"></div>
+
     <form id="report-form">
       <section class="form-section">
         <h2>Personal Details</h2>
@@ -34,15 +36,18 @@
           <div class="form-group">
             <label for="victim_name">Full Name *</label>
             <input type="text" id="victim_name" name="victim_name" required minlength="2">
+            <span class="error-msg" id="err-victim_name" style="color:var(--critical); font-size:0.8rem; display:none;"></span>
           </div>
           <div class="form-group">
             <label for="victim_mobile">Mobile Number * (10 digits)</label>
             <input type="tel" id="victim_mobile" name="victim_mobile" required pattern="[6-9][0-9]{9}" maxlength="10">
+            <span class="error-msg" id="err-victim_mobile" style="color:var(--critical); font-size:0.8rem; display:none;"></span>
           </div>
         </div>
         <div class="form-group">
           <label for="victim_email">Email</label>
           <input type="email" id="victim_email" name="victim_email">
+          <span class="error-msg" id="err-victim_email" style="color:var(--critical); font-size:0.8rem; display:none;"></span>
         </div>
       </section>
 
@@ -51,22 +56,26 @@
         <div class="form-group">
           <label for="victim_address">Full Address</label>
           <textarea id="victim_address" name="victim_address" rows="2"></textarea>
+          <span class="error-msg" id="err-victim_address" style="color:var(--critical); font-size:0.8rem; display:none;"></span>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label for="victim_city">City</label>
             <input type="text" id="victim_city" name="victim_city">
+            <span class="error-msg" id="err-victim_city" style="color:var(--critical); font-size:0.8rem; display:none;"></span>
           </div>
           <div class="form-group">
-            <label for="victim_state">State / UT</label>
-            <select id="victim_state" name="victim_state">
+            <label for="victim_state">State / UT *</label>
+            <select id="victim_state" name="victim_state" required>
               <option value="">Select state</option>
             </select>
+            <span class="error-msg" id="err-victim_state" style="color:var(--critical); font-size:0.8rem; display:none;"></span>
           </div>
         </div>
         <div class="form-group">
           <label for="victim_pin">PIN Code</label>
           <input type="text" id="victim_pin" name="victim_pin" pattern="[0-9]{6}" maxlength="6">
+          <span class="error-msg" id="err-victim_pin" style="color:var(--critical); font-size:0.8rem; display:none;"></span>
         </div>
       </section>
 
@@ -122,6 +131,7 @@
           <label for="incident_details">Incident Description *</label>
           <textarea id="incident_details" name="incident_details" rows="5" required
             placeholder="Describe what happened in detail…"></textarea>
+          <span class="error-msg" id="err-incident_details" style="color:var(--critical); font-size:0.8rem; display:none;"></span>
         </div>
       </section>
 
@@ -151,9 +161,9 @@
       <button type="submit" class="btn-primary" id="btn-submit">Generate Complaint</button>
     </form>
 
-    <div class="success-state" id="success-state">
+    <div class="success-state" id="success-state" style="display:none;">
       <h2>✓ Complaint Generated Successfully</h2>
-      <p class="text-muted">Your 7-section police complaint is ready for download and filing at cybercrime.gov.in</p>
+      <p class="text-muted">Your 7-section police complaint is ready for download and filing at cybercrime.gov.in. Report ID: <strong id="success-report-id"></strong></p>
       <button type="button" class="btn-primary" id="btn-download" style="max-width:320px;margin:1rem auto 0">
         Download Complaint (.txt)
       </button>
@@ -165,19 +175,20 @@
   <script src="/assets/app.js"></script>
   <script>
     const INDIAN_STATES = [
-      'Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa','Gujarat',
-      'Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala','Madhya Pradesh',
-      'Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Punjab',
-      'Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh',
-      'Uttarakhand','West Bengal','Andaman and Nicobar Islands','Chandigarh',
-      'Dadra and Nagar Haveli and Daman and Diu','Delhi','Jammu and Kashmir',
-      'Ladakh','Lakshadweep','Puducherry'
+      'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat',
+      'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh',
+      'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
+      'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh',
+      'Uttarakhand', 'West Bengal', 'Andaman and Nicobar Islands', 'Chandigarh',
+      'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Jammu and Kashmir',
+      'Ladakh', 'Lakshadweep', 'Puducherry'
     ];
 
     const params = new URLSearchParams(window.location.search);
     const scanId = params.get('scan_id') || '';
     let reportId = null;
 
+    // Populate state select dropdown
     const stateSelect = document.getElementById('victim_state');
     INDIAN_STATES.forEach(s => {
       const opt = document.createElement('option');
@@ -188,82 +199,200 @@
 
     document.getElementById('info-scan-id').textContent = scanId || 'Not linked';
 
-    async function loadScan() {
-      if (!scanId) return;
-      try {
-        const res = await Sentinel.api('/scan/' + encodeURIComponent(scanId));
-        const s = res.data;
-        document.getElementById('info-risk').textContent =
-          Math.round(s.risk_score || 0) + '% ' + (s.risk_level || '');
-        document.getElementById('info-category').textContent =
-          (s.category || '').replace(/_/g, ' ');
-        if (s.suspect_phone) document.getElementById('suspect_phone').value = s.suspect_phone;
-        if (s.suspect_upi) document.getElementById('suspect_upi').value = s.suspect_upi;
-        if (s.suspect_website) document.getElementById('suspect_website').value = s.suspect_website;
-        if (s.input_text && !document.getElementById('incident_details').value) {
-          document.getElementById('incident_details').value =
-            'Scam message analyzed by Your Sentinel:\n\n' + (s.input_text || '').slice(0, 2000);
-        }
-      } catch (e) {
-        console.warn('Scan load', e);
+    // Clear and display inline errors under input fields
+    function clearErrors() {
+      document.querySelectorAll('.error-msg').forEach(el => {
+        el.textContent = '';
+        el.style.display = 'none';
+      });
+      document.getElementById('error-container').style.display = 'none';
+    }
+
+    function showFieldError(fieldId, message) {
+      const errEl = document.getElementById('err-' + fieldId);
+      if (errEl) {
+        errEl.textContent = message;
+        errEl.style.display = 'block';
       }
     }
 
-    document.getElementById('report-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const mobile = document.getElementById('victim_mobile').value.replace(/\D/g, '');
-      if (mobile.length !== 10 || !/^[6-9]/.test(mobile)) {
-        Sentinel.showToast('Invalid mobile', 'Enter valid 10-digit Indian mobile number', 'HIGH');
+    // Load Scan Information
+    async function loadScanInfo() {
+      if (!scanId) {
+        document.getElementById('error-container').textContent = 'Error: scan_id query parameter is missing. Submit button disabled.';
+        document.getElementById('error-container').style.display = 'block';
+        document.getElementById('btn-submit').disabled = true;
         return;
       }
+      try {
+        const res = await Sentinel.api('/scan/' + encodeURIComponent(scanId));
+        if (!res || !res.data) {
+          throw new Error('Invalid scan data response');
+        }
+        const s = res.data;
+        const riskLevel = s.risk_level || 'LOW';
+        const score = Math.round(s.risk_score || 0);
+        
+        // Display details
+        document.getElementById('info-risk').textContent = score + '% ' + riskLevel;
+        document.getElementById('info-category').textContent = (s.category || '').replace(/_/g, ' ').toUpperCase();
+
+        // Style the bar according to risk
+        const bar = document.getElementById('scan-info-bar');
+        bar.className = 'scan-info-bar';
+        if (riskLevel === 'CRITICAL') bar.style.borderTop = '4px solid var(--critical)';
+        else if (riskLevel === 'HIGH') bar.style.borderTop = '4px solid var(--high)';
+        else if (riskLevel === 'MODERATE') bar.style.borderTop = '4px solid var(--moderate)';
+        else bar.style.borderTop = '4px solid var(--low)';
+
+        // Pre-fill suspect details if found
+        if (s.suspect_phone) {
+          document.getElementById('suspect_phone').value = s.suspect_phone;
+        }
+        if (s.suspect_upi) {
+          document.getElementById('suspect_upi').value = s.suspect_upi;
+        }
+        if (s.suspect_website) {
+          document.getElementById('suspect_website').value = s.suspect_website;
+        } else if (s.extracted_urls && s.extracted_urls.length) {
+          document.getElementById('suspect_website').value = s.extracted_urls[0];
+        }
+
+        if (s.input_text && !document.getElementById('incident_details').value) {
+          document.getElementById('incident_details').value =
+            'Suspicious communication analyzed:\n\n' + s.input_text;
+        }
+      } catch (e) {
+        document.getElementById('error-container').textContent = 'Failed to load scan information: ' + e.message + '. Submit button disabled.';
+        document.getElementById('error-container').style.display = 'block';
+        document.getElementById('btn-submit').disabled = true;
+        Sentinel.showToast('Error Loading Scan', e.message, 'CRITICAL');
+      }
+    }
+
+    // Submit Report Handler
+    document.getElementById('report-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearErrors();
+
+      let hasErrors = false;
+
+      // 1. Name validation
+      const nameEl = document.getElementById('victim_name');
+      const nameVal = nameEl.value.trim();
+      if (nameVal.length < 2) {
+        showFieldError('victim_name', 'Full Name must be at least 2 characters.');
+        hasErrors = true;
+      }
+
+      // 2. Mobile validation
+      const mobileEl = document.getElementById('victim_mobile');
+      const mobileVal = mobileEl.value.replace(/\D/g, '');
+      if (mobileVal.length !== 10) {
+        showFieldError('victim_mobile', 'Mobile Number must be exactly 10 digits.');
+        hasErrors = true;
+      }
+
+      // 3. State validation
+      const stateEl = document.getElementById('victim_state');
+      if (!stateEl.value) {
+        showFieldError('victim_state', 'Please select a state / UT.');
+        hasErrors = true;
+      }
+
+      // 4. Incident details validation
+      const detailsEl = document.getElementById('incident_details');
+      if (!detailsEl.value.trim()) {
+        showFieldError('incident_details', 'Incident Description is required.');
+        hasErrors = true;
+      }
+
+      if (hasErrors) {
+        document.getElementById('error-container').textContent = 'Please fix the errors below before submitting.';
+        document.getElementById('error-container').style.display = 'block';
+        return;
+      }
+
       const btn = document.getElementById('btn-submit');
       btn.disabled = true;
-      btn.textContent = 'Generating with AI 4 (Groq)…';
+      btn.textContent = 'Generating Complaint...';
+
       const payload = {
-        scan_id: scanId || 'SN-MANUAL',
-        victim_name: document.getElementById('victim_name').value,
-        victim_mobile: mobile,
-        victim_email: document.getElementById('victim_email').value || null,
-        victim_address: document.getElementById('victim_address').value || null,
-        victim_city: document.getElementById('victim_city').value || null,
-        victim_state: document.getElementById('victim_state').value || null,
-        victim_pin: document.getElementById('victim_pin').value || null,
+        scan_id: scanId,
+        victim_name: nameVal,
+        victim_mobile: mobileVal,
+        victim_email: document.getElementById('victim_email').value.trim() || null,
+        victim_address: document.getElementById('victim_address').value.trim() || null,
+        victim_city: document.getElementById('victim_city').value.trim() || null,
+        victim_state: stateEl.value,
+        victim_pin: document.getElementById('victim_pin').value.trim() || null,
         id_proof_type: document.getElementById('id_proof_type').value || null,
-        id_proof_number: document.getElementById('id_proof_number').value || null,
+        id_proof_number: document.getElementById('id_proof_number').value.trim() || null,
         incident_date: document.getElementById('incident_date').value || null,
         incident_time: document.getElementById('incident_time').value || null,
         amount_lost: parseFloat(document.getElementById('amount_lost').value) || 0,
         payment_method: document.getElementById('payment_method').value || null,
-        incident_details: document.getElementById('incident_details').value,
-        suspect_phone: document.getElementById('suspect_phone').value || null,
-        suspect_upi: document.getElementById('suspect_upi').value || null,
-        suspect_website: document.getElementById('suspect_website').value || null,
-        suspect_details: document.getElementById('suspect_details').value || null,
+        incident_details: detailsEl.value.trim(),
+        suspect_phone: document.getElementById('suspect_phone').value.trim() || null,
+        suspect_upi: document.getElementById('suspect_upi').value.trim() || null,
+        suspect_website: document.getElementById('suspect_website').value.trim() || null,
+        suspect_details: document.getElementById('suspect_details').value.trim() || null
       };
+
       try {
         const res = await Sentinel.api('/report/generate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         });
+        
+        if (!res || !res.data || !res.data.report_id) {
+          throw new Error('Report generation failed to return an ID.');
+        }
+
         reportId = res.data.report_id;
+        document.getElementById('success-report-id').textContent = reportId;
         document.getElementById('report-form').style.display = 'none';
-        document.getElementById('success-state').classList.add('visible');
-        Sentinel.showToast('Success', 'Complaint generated — download ready', 'LOW');
+        document.getElementById('success-state').style.display = 'block';
+        
+        Sentinel.showToast('Complaint Generated', 'Document compiled successfully.', 'LOW');
       } catch (err) {
-        Sentinel.showToast('Error', err.message, 'CRITICAL');
+        Sentinel.showToast('Generation Failed', err.message, 'CRITICAL');
         btn.disabled = false;
         btn.textContent = 'Generate Complaint';
       }
     });
 
-    document.getElementById('btn-download').addEventListener('click', () => {
-      if (reportId) {
-        window.location.href = Sentinel.API_BASE + '/report/download/' + reportId;
+    // Download Report Handler
+    document.getElementById('btn-download').addEventListener('click', async () => {
+      if (!reportId) return;
+      try {
+        const victimName = document.getElementById('victim_name').value.trim().replace(/\s+/g, '_');
+        const url = Sentinel.API_BASE + '/report/download/' + encodeURIComponent(reportId);
+        
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Failed to retrieve file download from server.');
+        
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = blobUrl;
+        a.download = `complaint_${victimName || 'victim'}_${reportId}.txt`;
+        document.body.appendChild(a);
+        
+        a.click();
+        
+        window.URL.revokeObjectURL(blobUrl);
+        a.remove();
+        Sentinel.showToast('Download Started', 'Text report file saved.', 'LOW');
+      } catch (e) {
+        Sentinel.showToast('Download Error', e.message, 'CRITICAL');
       }
     });
 
-    loadScan();
+    loadScanInfo();
   </script>
 </body>
 </html>
