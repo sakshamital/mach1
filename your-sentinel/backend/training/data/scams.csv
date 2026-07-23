@@ -1,0 +1,211 @@
+text,label,category,language,severity
+Your OTP for SBI transaction is valid for 10 minutes. Do not share with anyone.,SAFE,banking_otp,en,LOW
+Amazon order #402-1234567 has been delivered. Track at amazon.in/orders,SAFE,delivery_customs,en,LOW
+"Reminder: Electricity bill of Rs 1,240 due on 15th. Pay via official app.",SAFE,utility_electricity,en,LOW
+"HDFC Bank: Salary credited Rs 45,000 to A/c XX1234",SAFE,banking_otp,en,LOW
+Meeting rescheduled to 4 PM tomorrow. See you at office.,SAFE,unknown,en,LOW
+Happy birthday! Hope you have a wonderful day.,SAFE,unknown,en,LOW
+Your Swiggy order is out for delivery. ETA 25 mins,SAFE,unknown,en,LOW
+ICICI Bank: Statement for March available in iMobile app,SAFE,banking_otp,en,LOW
+Train ticket PNR 1234567890 confirmed. IRCTC,SAFE,unknown,en,LOW
+Flipkart: Return pickup scheduled for Monday,SAFE,delivery_customs,en,LOW
+Jio: Your recharge of Rs 299 is successful,SAFE,unknown,en,LOW
+Airtel: Data pack 2GB activated on your number,SAFE,unknown,en,LOW
+LIC premium due on 01-Apr. Pay via licindia.in only,SAFE,insurance,en,LOW
+Paytm: Received Rs 500 from Rahul S,SAFE,qr_upi,en,LOW
+PhonePe: Payment to BigBasket successful Rs 890,SAFE,qr_upi,en,LOW
+Google Pay: You received Rs 200 from Priya,SAFE,qr_upi,en,LOW
+Class test on Friday. Bring geometry box. - School,SAFE,unknown,en,LOW
+Dinner at 8? Let me know. - Mom (saved contact),SAFE,family_impersonation,en,LOW
+Office leave approved for 2 days. HR Team,SAFE,job_employment,en,LOW
+Weather alert: Heavy rain expected in Mumbai today,SAFE,unknown,en,LOW
+BHIM: Transaction successful Ref no 12345,SAFE,qr_upi,en,LOW
+India Post: Article booked. Track at indiapost.gov.in,SAFE,delivery_customs,en,LOW
+"Netflix: New login from your device. If not you, reset password",SAFE,phishing,en,LOW
+Uber ride completed. Rate your driver,SAFE,unknown,en,LOW
+Zomato: Your order from Dominoes is being prepared,SAFE,unknown,en,LOW
+Your SBI account will be blocked. Share OTP sent to your mobile immediately.,SCAM,banking_otp,en,CRITICAL
+HDFC SECURITY: Suspicious activity detected. Verify OTP now or account frozen.,SCAM,banking_otp,en,CRITICAL
+ICICI Bank: Your card blocked. Call 9876543210 and share OTP to unblock.,SCAM,banking_otp,en,CRITICAL
+Axis Bank KYC expired. Click http://axis-kyc-verify.xyz update now.,SCAM,banking_otp,en,CRITICAL
+PNB Alert: OTP 847291 required to prevent account closure today.,SCAM,banking_otp,en,CRITICAL
+TRAI Notice: Your mobile will be disconnected in 24hrs. Press 1 to verify.,SCAM,trai_block,en,HIGH
+Department of Telecom: SIM block due to illegal activity. Call now.,SCAM,trai_block,en,HIGH
+TRAI: Your Aadhaar not linked to SIM. Number will be blocked. Reply YES.,SCAM,trai_block,en,HIGH
+CBI Officer Sharma: You are under digital arrest. Stay on video call. Pay 2 lakh bail.,SCAM,digital_arrest,en,CRITICAL
+NCB Mumbai: Drugs found in parcel in your name. Transfer 5 lakh or arrest warrant.,SCAM,digital_arrest,en,CRITICAL
+ED Investigation: Money laundering case. Do not disconnect video call. Pay security deposit.,SCAM,digital_arrest,en,CRITICAL
+"Hi dad, this is my new number. Phone broke. Need 25000 urgent. Will return tomorrow.",SCAM,family_impersonation,en,HIGH
+"Hi beta main mummy hoon, new phone liya hai. 15000 bhej do emergency mein.",SCAM,family_impersonation,hinglish,HIGH
+Papa urgent - accident ho gaya. Hospital mein hun. 30000 transfer karo is number pe.,SCAM,family_impersonation,hinglish,HIGH
+Double your money in 7 days. Guaranteed 200% returns. Join VIP Telegram group.,SCAM,investment_ponzi,en,CRITICAL
+Stock tips from SEBI insider. Invest 50000 get 5 lakh in 30 days.,SCAM,investment_ponzi,en,CRITICAL
+Crypto trading bot - daily 15% profit. Deposit minimum 10000 USDT.,SCAM,investment_ponzi,en,CRITICAL
+FedEx: Parcel held at customs. Pay Rs 4999 clearance fee http://fedex-india-pay.top,SCAM,delivery_customs,en,HIGH
+DHL Express: Illegal item detected. Pay penalty 8500 or legal action.,SCAM,delivery_customs,en,HIGH
+India Post: Package from abroad. Customs duty 3200 pay via UPI link.,SCAM,delivery_customs,en,HIGH
+Congratulations! Selected for Amazon WFH. Pay 2500 registration fee.,SCAM,job_employment,en,MODERATE
+TCS hiring - pay 5000 for background verification to get offer letter.,SCAM,job_employment,en,MODERATE
+Data entry job - earn 5000 daily. Pay 1500 training kit fee first.,SCAM,job_employment,en,MODERATE
+UIDAI: Aadhaar suspended. Share OTP to reactivate immediately.,SCAM,kyc_aadhaar,en,CRITICAL
+PAN Aadhaar not linked. Account blocked. Verify at http://pan-link-uidai.xyz,SCAM,kyc_aadhaar,en,CRITICAL
+Bank KYC pending. Upload Aadhaar OTP within 2 hours or account closed.,SCAM,kyc_aadhaar,en,CRITICAL
+Congratulations! You won 25 lakh in KBC lottery. Pay 15000 processing fee.,SCAM,lottery_prize,en,HIGH
+Lucky draw winner! Claim 10 lakh prize. Transfer 5000 tax advance.,SCAM,lottery_prize,en,HIGH
+RBI lottery scheme - you selected. Pay 8000 to receive 50 lakh.,SCAM,lottery_prize,en,HIGH
+Microsoft Security: Virus detected on PC. Call 1800-XXX or install AnyDesk.,SCAM,tech_support,en,HIGH
+Windows License expired. Call support 9123456789. Refund department needs remote access.,SCAM,tech_support,en,HIGH
+Apple iCloud breach. Verify identity. Share screen via TeamViewer code.,SCAM,tech_support,en,HIGH
+Army officer deployed. Need gift card for son birthday. Will repay when back.,SCAM,romance_honeytrap,en,HIGH
+Met on dating app. Coming to India. Send 20000 for customs clearance of gifts.,SCAM,romance_honeytrap,en,HIGH
+Love you darling. Emergency surgery. Wire 50000 to this account today.,SCAM,romance_honeytrap,en,HIGH
+Mumbai Police Cyber Cell: FIR filed against you. Pay 1 lakh or arrest today.,SCAM,fake_police,en,CRITICAL
+CBI Mumbai: Your account used in fraud. Transfer funds for verification.,SCAM,fake_police,en,CRITICAL
+Narcotics Bureau: Package in your name. Pay 3 lakh fine to avoid raid.,SCAM,fake_police,en,CRITICAL
+Scan this QR to RECEIVE 5000 cashback from Google Pay.,SCAM,qr_upi,en,CRITICAL
+PhonePe reward: Scan QR below to claim 2000 rupees instantly.,SCAM,qr_upi,en,CRITICAL
+Send money? No - scan QR to receive refund of 15000.,SCAM,qr_upi,en,CRITICAL
+RBI officer on call: Install AnyDesk for account verification now.,SCAM,screen_share,en,CRITICAL
+Bank manager: Share screen to process refund of wrong debit.,SCAM,screen_share,en,CRITICAL
+Income Tax: Install QuickSupport app for tax refund processing.,SCAM,screen_share,en,CRITICAL
+MSEB: Bill unpaid. Power cut in 2 hours. Pay 1899 via link now.,SCAM,utility_electricity,en,MODERATE
+BSES Delhi: Meter reading failed. Pay 2500 immediately avoid disconnection.,SCAM,utility_electricity,en,MODERATE
+Tata Power: Outstanding 3400. Click pay or face legal notice.,SCAM,utility_electricity,en,MODERATE
+Instant loan 5 lakh approved. Pay 2000 processing to disbursal account.,SCAM,loan_app,en,HIGH
+CreditMitra app: Loan approved. Pay insurance 1500 first.,SCAM,loan_app,en,HIGH
+QuickCash: 50000 loan. Pay 10% advance fee for instant transfer.,SCAM,loan_app,en,HIGH
+Bitcoin investment - 300% monthly. Deposit on WazirX-fake.com,SCAM,cryptocurrency,en,HIGH
+Crypto mining contract - guaranteed 50% weekly. Send USDT to wallet.,SCAM,cryptocurrency,en,HIGH
+Binance India promotion - send 20000 get 80000 in 48 hours.,SCAM,cryptocurrency,en,HIGH
+Earn 5000 daily liking YouTube videos. Pay 500 deposit to start.,SCAM,part_time_task,en,MODERATE
+Telegram task group - commission 800 per task. Deposit 2000 first.,SCAM,part_time_task,en,MODERATE
+Amazon review job - 300 per review. Registration 1000 refundable.,SCAM,part_time_task,en,MODERATE
+SBI Net Banking: Click https://onlinesbi-secure-login.xyz verify account.,SCAM,phishing,en,CRITICAL
+Income Tax refund 45000 pending. Login http://incometax-refund-gov.in,SCAM,phishing,en,CRITICAL
+Amazon account locked. Verify at http://amazon-account-verify.top,SCAM,phishing,en,CRITICAL
+Stranded abroad. Wallet stolen. Send 40000 Western Union urgent.,SCAM,fake_emergency,en,HIGH
+Friend in accident. Hospital needs 20000 deposit. Cant call only WhatsApp.,SCAM,fake_emergency,en,HIGH
+Kidnapped. Do not inform police. Pay ransom 10 lakh to this UPI.,SCAM,fake_emergency,en,HIGH
+LIC maturity 8 lakh ready. Pay 3000 processing fee to release.,SCAM,insurance,en,MODERATE
+Policy lapse. Pay 2500 reinstatement or lose 5 lakh coverage.,SCAM,insurance,en,MODERATE
+Insurance refund 12000. Share bank OTP to credit account.,SCAM,insurance,en,MODERATE
+PM Kisan scheme: You eligible for 6000. Pay 500 registration fee.,SCAM,government_impersonation,en,CRITICAL
+Income Tax raid notice. Call 9876512345 pay 25000 to settle.,SCAM,government_impersonation,en,CRITICAL
+RBI governor message: Your account flagged. Verify immediately.,SCAM,government_impersonation,en,CRITICAL
+Aapka bank account band ho jayega. Turant OTP bhejo.,SCAM,banking_otp,hinglish,CRITICAL
+TRAI se notice: 24 ghante mein SIM band. 1 dabao verify karne ke liye.,SCAM,trai_block,hinglish,HIGH
+CBI officer bol rahe hain digital arrest hai. Video call pe raho. 2 lakh bhejo.,SCAM,digital_arrest,hinglish,CRITICAL
+Papa ji new number hai. Phone kharab. 20000 chahiye abhi.,SCAM,family_impersonation,hinglish,HIGH
+Paisa double karo 7 din mein. 200% profit guaranteed.,SCAM,investment_ponzi,hinglish,CRITICAL
+Courier customs mein fasa. 4999 rupees bharo link pe.,SCAM,delivery_customs,hinglish,HIGH
+Naukri mil gayi Amazon WFH. 2500 registration fee do.,SCAM,job_employment,hinglish,MODERATE
+Aadhaar band ho gaya. OTP share karo turant.,SCAM,kyc_aadhaar,hinglish,CRITICAL
+25 lakh jeete KBC lottery mein. 15000 fee bhejo.,SCAM,lottery_prize,hinglish,HIGH
+Microsoft virus hai PC mein. AnyDesk install karo.,SCAM,tech_support,hinglish,HIGH
+QR scan karo 5000 cashback paane ke liye.,SCAM,qr_upi,hinglish,CRITICAL
+Bijli bill pending. 2 ghante mein kaat denge. Link se pay karo.,SCAM,utility_electricity,hinglish,MODERATE
+Instant loan 5 lakh. 2000 processing fee pehle.,SCAM,loan_app,hinglish,HIGH
+RBI kabhi call nahi karta - ye message scam hai: account block ho gaya OTP bhejo,SCAM,banking_otp,hinglish,CRITICAL
+Flipkart se job offer - 3000 security deposit bhejo offer letter ke liye,SCAM,job_employment,hinglish,MODERATE
+Google Pay support calling - share your UPI PIN to fix transaction,SCAM,qr_upi,en,CRITICAL
+Paytm KYC update required click bit.ly/paytmkyc123,SCAM,kyc_aadhaar,en,CRITICAL
+Jio tower installation fee refund - share bank details and OTP,SCAM,phishing,en,HIGH
+Meesho seller account verification pay 999,SCAM,phishing,en,MODERATE
+NABARD subsidy approved transfer 5000 advance tax,SCAM,government_impersonation,en,CRITICAL
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,lottery_prize,en,HIGH
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,government_impersonation,en,MODERATE
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,trai_block,en,HIGH
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,cryptocurrency,en,MODERATE
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,insurance,en,MODERATE
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,utility_electricity,en,MODERATE
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,screen_share,en,CRITICAL
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,romance_honeytrap,en,HIGH
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,fake_police,en,CRITICAL
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,utility_electricity,en,MODERATE
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,part_time_task,en,CRITICAL
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,phishing,en,HIGH
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,government_impersonation,en,HIGH
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,family_impersonation,en,CRITICAL
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,delivery_customs,en,CRITICAL
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,government_impersonation,en,MODERATE
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,part_time_task,en,MODERATE
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,qr_upi,en,CRITICAL
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,government_impersonation,en,CRITICAL
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,romance_honeytrap,en,CRITICAL
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,phishing,en,MODERATE
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,qr_upi,en,MODERATE
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,investment_ponzi,en,HIGH
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,phishing,en,CRITICAL
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,kyc_aadhaar,en,HIGH
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,trai_block,en,HIGH
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,fake_emergency,en,HIGH
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,cryptocurrency,en,CRITICAL
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,government_impersonation,en,MODERATE
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,tech_support,en,CRITICAL
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,lottery_prize,en,MODERATE
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,insurance,en,CRITICAL
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,investment_ponzi,en,CRITICAL
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,fake_emergency,en,CRITICAL
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,fake_police,en,CRITICAL
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,phishing,en,HIGH
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,part_time_task,en,HIGH
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,lottery_prize,en,MODERATE
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,part_time_task,en,MODERATE
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,qr_upi,en,MODERATE
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,cryptocurrency,en,CRITICAL
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,digital_arrest,en,CRITICAL
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,phishing,en,HIGH
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,kyc_aadhaar,en,HIGH
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,cryptocurrency,en,HIGH
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,part_time_task,en,HIGH
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,kyc_aadhaar,en,CRITICAL
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,family_impersonation,en,MODERATE
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,screen_share,en,CRITICAL
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,trai_block,en,CRITICAL
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,kyc_aadhaar,en,HIGH
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,investment_ponzi,en,CRITICAL
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,kyc_aadhaar,en,HIGH
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,trai_block,en,MODERATE
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,kyc_aadhaar,en,HIGH
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,job_employment,en,CRITICAL
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,banking_otp,en,CRITICAL
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,screen_share,en,MODERATE
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,investment_ponzi,en,HIGH
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,phishing,en,MODERATE
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,trai_block,en,HIGH
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,trai_block,en,MODERATE
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,fake_emergency,en,HIGH
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,family_impersonation,en,MODERATE
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,fake_emergency,en,HIGH
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,lottery_prize,en,HIGH
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,lottery_prize,en,CRITICAL
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,romance_honeytrap,en,HIGH
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,digital_arrest,en,MODERATE
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,investment_ponzi,en,CRITICAL
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,tech_support,en,HIGH
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,fake_emergency,en,MODERATE
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,government_impersonation,en,HIGH
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,family_impersonation,en,MODERATE
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,tech_support,en,MODERATE
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,government_impersonation,en,MODERATE
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,lottery_prize,en,HIGH
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,trai_block,en,HIGH
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,delivery_customs,en,MODERATE
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,part_time_task,en,HIGH
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,part_time_task,en,HIGH
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,screen_share,en,HIGH
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,trai_block,en,CRITICAL
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,fake_police,en,MODERATE
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,kyc_aadhaar,en,HIGH
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,delivery_customs,en,MODERATE
+"('Your {} KYC expired. Update at fake-{}.com', 'kyc_aadhaar')",SCAM,lottery_prize,en,HIGH
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,trai_block,en,CRITICAL
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,fake_police,en,CRITICAL
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,government_impersonation,en,HIGH
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,digital_arrest,en,CRITICAL
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,government_impersonation,en,MODERATE
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,lottery_prize,en,HIGH
+"('URGENT: {} account suspended. Verify OTP within 1 hour.', 'banking_otp')",SCAM,family_impersonation,en,MODERATE
+"('{} lottery: You won! Pay processing fee.', 'lottery_prize')",SCAM,screen_share,en,MODERATE
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,phishing,en,HIGH
+"('{} delivery: Customs hold. Pay Rs {} online.', 'delivery_customs')",SCAM,banking_otp,en,MODERATE

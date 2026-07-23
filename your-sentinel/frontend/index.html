@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Sentinel v8.0 — AI Scam Detection for India</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-icon">🛡</div>
+        <span>Your Sentinel</span>
+      </div>
+      <nav class="nav-tabs" role="tablist">
+        <button class="nav-tab active" data-view="scan">Scan</button>
+        <button class="nav-tab" data-view="vault">Vault</button>
+        <button class="nav-tab" data-view="stats">Stats</button>
+        <button class="nav-tab" data-view="news">News</button>
+      </nav>
+      <div class="status-pill">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="status-label">Checking…</span>
+      </div>
+      <div class="notif-wrap">
+        <button class="notif-bell" id="notif-bell" aria-label="Notifications">🔔</button>
+        <span class="notif-badge" id="notif-badge" hidden>0</span>
+        <div class="notif-panel" id="notif-panel">
+          <div class="notif-panel-head">
+            <strong>Notifications</strong>
+            <button type="button" id="notif-mark-all">Mark all read</button>
+          </div>
+          <ul id="notif-list"></ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="news-ticker" aria-live="polite">
+    <div class="ticker-track" id="ticker-track"></div>
+  </div>
+
+  <main class="main-content">
+    <!-- SCAN VIEW -->
+    <section id="view-scan" class="view active">
+      <div class="hero">
+        <span class="eyebrow">v8.0 · Multi-AI · Free for every Indian</span>
+        <h1>Detect scams before they steal your money</h1>
+        <p class="subtitle">Paste a suspicious SMS, WhatsApp message, or upload a screenshot. Four AI models analyze it in seconds.</p>
+      </div>
+
+      <div class="scan-panel">
+        <textarea class="scan-textarea" id="scan-text" placeholder="Paste suspicious message here… (Hindi, English, Hinglish supported)"></textarea>
+        <label class="upload-zone" id="upload-zone">
+          <input type="file" id="scan-file" accept="image/*">
+          <p>📷 Drop screenshot or click to upload (WhatsApp, SMS, any image)</p>
+          <div class="upload-preview" id="upload-preview"></div>
+        </label>
+        <button type="button" class="btn-primary" id="btn-analyze">Analyze Now</button>
+      </div>
+
+      <div class="loading-state" id="loading-state">
+        <div class="spinner"></div>
+        <ul class="pipeline-steps" id="pipeline-steps"></ul>
+      </div>
+
+      <div class="risk-banner" id="risk-banner">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem">
+          <div>
+            <h2 id="risk-verdict">—</h2>
+            <p id="risk-category" class="text-muted"></p>
+          </div>
+          <div class="risk-score" id="risk-score">0%</div>
+        </div>
+        <p id="risk-summary" style="margin-top:0.75rem;font-size:0.9rem"></p>
+        <button type="button" class="btn-report hidden" id="btn-generate-report">Generate Report →</button>
+      </div>
+
+      <div class="result-section" id="result-section">
+        <div class="alert-card hidden" id="mismatch-card">
+          <h3 style="color:var(--critical);margin-bottom:0.5rem">⚠ Official Mismatch Detected</h3>
+          <div id="mismatch-content"></div>
+        </div>
+        <div class="alert-card verify-card hidden" id="verify-card">
+          <h3 style="color:var(--verify);margin-bottom:0.5rem">🔍 50-50 Verify Mode</h3>
+          <ol id="verify-steps" style="padding-left:1.25rem;font-size:0.9rem"></ol>
+        </div>
+        <div class="alert-card url-card hidden" id="url-card">
+          <h3 style="color:var(--high);margin-bottom:0.5rem">🔗 URL Threats</h3>
+          <ul id="url-threats-list"></ul>
+        </div>
+        <div class="result-grid">
+          <div class="card"><h3>Summary</h3><p id="card-summary"></p></div>
+          <div class="card"><h3>Triggers</h3><ul id="card-triggers"></ul></div>
+          <div class="card"><h3>Actions</h3><ul id="card-actions"></ul></div>
+          <div class="card"><h3>Indicators</h3><ul id="card-indicators"></ul></div>
+          <div class="card full-width"><h3>Forensic Report</h3><p id="card-forensic" style="font-size:0.9rem;line-height:1.7"></p></div>
+        </div>
+        <div style="display:flex;gap:0.75rem;margin-top:1rem;flex-wrap:wrap">
+          <button type="button" class="btn-secondary" id="btn-confirm-scam">Confirm as Scam (Community)</button>
+          <button type="button" class="btn-secondary" id="btn-export-scan">Export TXT</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VAULT VIEW -->
+    <section id="view-vault" class="view">
+      <h1 style="font-family:var(--font-head);margin-bottom:1.5rem">Scan Vault</h1>
+      <ul class="vault-list" id="vault-list">
+        <li class="empty-state">Loading history…</li>
+      </ul>
+    </section>
+
+    <!-- STATS VIEW -->
+    <section id="view-stats" class="view">
+      <h1 style="font-family:var(--font-head);margin-bottom:1.5rem">Dashboard</h1>
+      <div class="stats-grid" id="stats-grid"></div>
+      <div class="card">
+        <h3>Top Scam Categories</h3>
+        <ul id="top-categories"></ul>
+      </div>
+    </section>
+
+    <!-- NEWS VIEW -->
+    <section id="view-news" class="view">
+      <h1 style="font-family:var(--font-head);margin-bottom:1rem">Scam News Board</h1>
+      <div class="news-filters">
+        <button class="filter-btn active" data-severity="">All</button>
+        <button class="filter-btn" data-severity="CRITICAL">Critical</button>
+        <button class="filter-btn" data-severity="HIGH">High</button>
+        <button class="filter-btn" data-severity="MODERATE">Moderate</button>
+      </div>
+      <div class="news-grid" id="news-grid"></div>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="tips-modal">
+    <div class="modal">
+      <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+      <h2 id="modal-title"></h2>
+      <p id="modal-summary" class="text-muted"></p>
+      <h3 style="margin-top:1rem;font-size:0.9rem;color:var(--teal-400)">Prevention Tips</h3>
+      <ul class="tips-list" id="modal-tips"></ul>
+      <p class="helpline" id="modal-helpline" style="margin-top:1rem"></p>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="/assets/app.js"></script>
+  <script>
+    const PIPELINE_STEPS = [
+      'Extracting URLs from input',
+      'Checking URLs (Safe Browsing + VirusTotal)',
+      'Analyzing image with Gemini Vision',
+      'Running behaviour engine & mismatch detector',
+      'Deep text analysis with Gemini',
+      'Computing unified verdict',
+      'Preparing forensic narrative',
+      'Saving results & notifying',
+    ];
+
+    let lastScanId = null;
+    let selectedFile = null;
+
+    function initPipelineSteps() {
+      const ul = document.getElementById('pipeline-steps');
+      ul.innerHTML = PIPELINE_STEPS.map((s, i) =>
+        `<li data-step="${i}">${Sentinel.esc(s)}</li>`
+      ).join('');
+    }
+
+    function setPipelineStep(idx) {
+      document.querySelectorAll('#pipeline-steps li').forEach((li, i) => {
+        li.classList.remove('active', 'done');
+        if (i < idx) li.classList.add('done');
+        if (i === idx) li.classList.add('active');
+      });
+    }
+
+    async function runPipelineAnimation() {
+      for (let i = 0; i < PIPELINE_STEPS.length; i++) {
+        setPipelineStep(i);
+        await new Promise(r => setTimeout(r, 400 + Math.random() * 300));
+      }
+    }
+
+    function showResults(data) {
+      lastScanId = data.scan_id;
+      const banner = document.getElementById('risk-banner');
+      const level = data.verify_mode ? 'VERIFY' : data.risk_level;
+      banner.className = 'risk-banner visible ' + Sentinel.riskClass(level);
+      document.getElementById('risk-verdict').textContent = data.verdict + ' — ' + level;
+      document.getElementById('risk-category').textContent = (data.category || '').replace(/_/g, ' ');
+      document.getElementById('risk-score').textContent = Math.round(data.risk_score) + '%';
+      document.getElementById('risk-summary').textContent = data.summary || '';
+
+      const reportBtn = document.getElementById('btn-generate-report');
+      if (data.is_scam || data.verify_mode) {
+        reportBtn.classList.remove('hidden');
+        reportBtn.onclick = () => {
+          window.location.href = '/report?scan_id=' + encodeURIComponent(data.scan_id);
+        };
+      } else {
+        reportBtn.classList.add('hidden');
+      }
+
+      const mismatchCard = document.getElementById('mismatch-card');
+      const mismatches = data.mismatch_alerts || [];
+      if (mismatches.length) {
+        mismatchCard.classList.remove('hidden');
+        document.getElementById('mismatch-content').innerHTML = mismatches.map(m =>
+          `<p><strong>${Sentinel.esc(m.claimed_entity)}</strong>: ${Sentinel.esc(m.message || m.claimed_value)}</p>`
+        ).join('');
+      } else mismatchCard.classList.add('hidden');
+
+      const verifyCard = document.getElementById('verify-card');
+      if (data.verify_mode && data.verify_steps) {
+        verifyCard.classList.remove('hidden');
+        document.getElementById('verify-steps').innerHTML = data.verify_steps.map(s =>
+          `<li>${Sentinel.esc(s)}</li>`
+        ).join('');
+      } else verifyCard.classList.add('hidden');
+
+      const urlCard = document.getElementById('url-card');
+      const threats = (data.url_threats || []).filter(u => u.is_malicious);
+      if (threats.length) {
+        urlCard.classList.remove('hidden');
+        document.getElementById('url-threats-list').innerHTML = threats.map(u =>
+          `<li><span class="mono">${Sentinel.esc(u.url)}</span> — ${u.threat_score}%</li>`
+        ).join('');
+      } else urlCard.classList.add('hidden');
+
+      document.getElementById('card-summary').textContent = data.summary || '';
+      const triggers = data.behaviour_triggers || [];
+      document.getElementById('card-triggers').innerHTML = triggers.length
+        ? triggers.map(t => `<li>${Sentinel.esc(t.label)}: ${Sentinel.esc((t.keywords || []).join(', '))}</li>`).join('')
+        : '<li class="text-muted">No behaviour triggers</li>';
+      const actions = data.recommended_actions || [];
+      document.getElementById('card-actions').innerHTML = actions.map(a =>
+        `<li>${Sentinel.esc(a)}</li>`
+      ).join('');
+      const indicators = (data.ai2_result && data.ai2_result.text && data.ai2_result.text.indicators) || [];
+      document.getElementById('card-indicators').innerHTML = indicators.length
+        ? indicators.map(i => `<li>${Sentinel.esc(i)}</li>`).join('')
+        : '<li class="text-muted">See triggers & URL analysis</li>';
+      document.getElementById('card-forensic').textContent =
+        data.forensic_narrative || 'Forensic narrative generating in background…';
+
+      document.getElementById('result-section').classList.add('visible');
+    }
+
+    document.getElementById('btn-analyze').addEventListener('click', async () => {
+      const text = document.getElementById('scan-text').value.trim();
+      if (!text && !selectedFile) {
+        Sentinel.showToast('Input required', 'Paste text or upload an image', 'MODERATE');
+        return;
+      }
+      const btn = document.getElementById('btn-analyze');
+      btn.disabled = true;
+      document.getElementById('loading-state').classList.add('active');
+      document.getElementById('result-section').classList.remove('visible');
+      document.getElementById('risk-banner').classList.remove('visible');
+      initPipelineSteps();
+      const anim = runPipelineAnimation();
+      try {
+        const form = new FormData();
+        form.append('text', text);
+        if (selectedFile) form.append('file', selectedFile);
+        const res = await fetch(Sentinel.API_BASE + '/analyze', { method: 'POST', body: form });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.detail || 'Analysis failed');
+        await anim;
+        setPipelineStep(PIPELINE_STEPS.length);
+        showResults(json.data);
+        loadVault();
+      } catch (e) {
+        Sentinel.showToast('Error', e.message, 'CRITICAL');
+      } finally {
+        document.getElementById('loading-state').classList.remove('active');
+        btn.disabled = false;
+      }
+    });
+
+    const uploadZone = document.getElementById('upload-zone');
+    const fileInput = document.getElementById('scan-file');
+    uploadZone.addEventListener('click', () => fileInput.click());
+    uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+    uploadZone.addEventListener('drop', e => {
+      e.preventDefault();
+      uploadZone.classList.remove('dragover');
+      if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
+    });
+    fileInput.addEventListener('change', () => { if (fileInput.files[0]) setFile(fileInput.files[0]); });
+    function setFile(f) {
+      selectedFile = f;
+      document.getElementById('upload-preview').textContent = 'Selected: ' + f.name;
+    }
+
+    document.getElementById('btn-confirm-scam').addEventListener('click', async () => {
+      if (!lastScanId) return;
+      try {
+        await Sentinel.api('/confirm', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ scan_id: lastScanId, verdict: 'SCAM' }),
+        });
+        Sentinel.showToast('Thank you', 'Pattern added to community learning', 'LOW');
+      } catch (e) {
+        Sentinel.showToast('Error', e.message, 'HIGH');
+      }
+    });
+
+    document.getElementById('btn-export-scan').addEventListener('click', () => {
+      if (lastScanId) window.open(Sentinel.API_BASE + '/export/' + lastScanId, '_blank');
+    });
+
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const view = tab.dataset.view;
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById('view-' + view).classList.add('active');
+        if (view === 'vault') loadVault();
+        if (view === 'stats') loadStats();
+        if (view === 'news') loadNews();
+      });
+    });
+
+    async function loadVault() {
+      const list = document.getElementById('vault-list');
+      try {
+        const res = await Sentinel.api('/history?per_page=50');
+        if (!res.data.length) {
+          list.innerHTML = '<li class="empty-state">No scans yet. Run your first analysis!</li>';
+          return;
+        }
+        list.innerHTML = res.data.map(s => `
+          <li class="vault-item" data-id="${Sentinel.esc(s.scan_id)}">
+            <div>
+              <strong class="mono">${Sentinel.esc(s.scan_id)}</strong>
+              <div class="vault-meta">${Sentinel.fmtTime(s.created_at)} · ${Sentinel.esc(s.category || '')}</div>
+            </div>
+            <span class="risk-pill ${s.risk_level}">${s.risk_level} ${Math.round(s.risk_score || 0)}%</span>
+          </li>
+        `).join('');
+        list.querySelectorAll('.vault-item').forEach(el => {
+          el.addEventListener('click', async () => {
+            const id = el.dataset.id;
+            const scan = await Sentinel.api('/scan/' + id);
+            document.querySelector('[data-view="scan"]').click();
+            showResults(scan.data);
+          });
+        });
+      } catch (e) {
+        list.innerHTML = '<li class="empty-state">Could not load vault</li>';
+      }
+    }
+
+    async function loadStats() {
+      const grid = document.getElementById('stats-grid');
+      try {
+        const res = await Sentinel.api('/stats');
+        const d = res.data;
+        const cards = [
+          ['Total Scans', d.live_total_scans?.count ?? d.total_scans?.count ?? 0],
+          ['Scams Detected', d.live_scams_detected?.count ?? d.scams_detected?.count ?? 0],
+          ['Critical Alerts', d.live_critical?.count ?? d.critical_alerts?.count ?? 0],
+          ['URLs Checked', d.urls_checked?.count ?? 0],
+          ['Reports', d.reports_generated?.count ?? 0],
+          ['Community', d.community_confirmations?.count ?? 0],
+          ['Verify Mode', d.live_verify_mode?.count ?? d.family_scams?.count ?? 0],
+          ['News Articles', d.news_articles?.count ?? 0],
+        ];
+        grid.innerHTML = cards.map(([l, v]) => `
+          <div class="stat-card"><div class="stat-value">${v}</div><div class="stat-label">${l}</div></div>
+        `).join('');
+        const top = d.top_categories || [];
+        document.getElementById('top-categories').innerHTML = top.length
+          ? top.map(c => `<li>${Sentinel.esc(c.category)} — ${c.count}</li>`).join('')
+          : '<li class="text-muted">No data yet</li>';
+      } catch (e) {
+        grid.innerHTML = '<p class="empty-state">Stats unavailable</p>';
+      }
+    }
+
+    let newsSeverityFilter = '';
+    async function loadNews() {
+      const grid = document.getElementById('news-grid');
+      try {
+        let path = '/news?limit=30';
+        if (newsSeverityFilter) path += '&severity=' + newsSeverityFilter;
+        const res = await Sentinel.api(path);
+        grid.innerHTML = res.data.map(a => `
+          <article class="news-card">
+            <span class="notif-sev ${Sentinel.severityDot(a.severity)}"></span>
+            <h4>${Sentinel.esc(a.title)}</h4>
+            <p>${Sentinel.esc(a.summary || '')}</p>
+            <div class="news-card-footer">
+              <span class="text-muted" style="font-size:0.75rem">${Sentinel.esc(a.source || '')}</span>
+              <button class="btn-secondary" data-article="${Sentinel.esc(a.article_id)}">Prevention Tips</button>
+            </div>
+          </article>
+        `).join('');
+        grid.querySelectorAll('[data-article]').forEach(btn => {
+          btn.addEventListener('click', () => openTipsModal(btn.dataset.article));
+        });
+      } catch (e) {
+        grid.innerHTML = '<p class="empty-state">News unavailable</p>';
+      }
+    }
+
+    async function openTipsModal(articleId) {
+      try {
+        const res = await Sentinel.api('/news/' + articleId);
+        const a = res.data;
+        const tips = res.prevention_tips || {};
+        document.getElementById('modal-title').textContent = a.title;
+        document.getElementById('modal-summary').textContent = a.summary || a.content || '';
+        document.getElementById('modal-tips').innerHTML = (tips.tips || []).map(t =>
+          `<li>${Sentinel.esc(t)}</li>`
+        ).join('');
+        document.getElementById('modal-helpline').textContent = tips.helpline
+          ? 'Helpline: ' + tips.helpline : 'Helpline: 1930';
+        document.getElementById('tips-modal').classList.add('open');
+      } catch (e) {
+        Sentinel.showToast('Error', e.message, 'HIGH');
+      }
+    }
+
+    document.getElementById('modal-close').addEventListener('click', () => {
+      document.getElementById('tips-modal').classList.remove('open');
+    });
+    document.getElementById('tips-modal').addEventListener('click', e => {
+      if (e.target.id === 'tips-modal') document.getElementById('tips-modal').classList.remove('open');
+    });
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        newsSeverityFilter = btn.dataset.severity || '';
+        loadNews();
+      });
+    });
+
+    async function loadTicker() {
+      try {
+        const res = await Sentinel.api('/news/ticker');
+        const items = res.data || [];
+        const html = items.concat(items).map(i =>
+          `<span class="ticker-item"><span class="notif-sev ${Sentinel.severityDot(i.severity)}"></span>${Sentinel.esc(i.title)}</span>`
+        ).join('');
+        document.getElementById('ticker-track').innerHTML = html || '<span class="ticker-item">Stay safe — Report scams at 1930 | cybercrime.gov.in</span>';
+      } catch (e) {
+        document.getElementById('ticker-track').innerHTML =
+          '<span class="ticker-item">Your Sentinel — Free AI scam protection for India</span>';
+      }
+    }
+
+    initPipelineSteps();
+    loadTicker();
+    loadNews();
+  </script>
+</body>
+</html>

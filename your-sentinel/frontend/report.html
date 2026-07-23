@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate Police Complaint — Your Sentinel</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body class="report-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-icon">🛡</div>
+        <span>Your Sentinel</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <a href="/" class="back-link">← Back to Scan</a>
+    <h1 style="font-family:var(--font-head);margin-bottom:0.5rem">Police Complaint Generator</h1>
+    <p class="text-muted" style="margin-bottom:1.5rem">AI-generated 7-section complaint ready for cybercrime.gov.in</p>
+
+    <div class="scan-info-bar" id="scan-info-bar">
+      <span><strong>Scan ID:</strong> <span class="mono" id="info-scan-id">—</span></span>
+      <span><strong>Risk:</strong> <span id="info-risk">—</span></span>
+      <span><strong>Category:</strong> <span id="info-category">—</span></span>
+    </div>
+
+    <form id="report-form">
+      <section class="form-section">
+        <h2>Personal Details</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="victim_name">Full Name *</label>
+            <input type="text" id="victim_name" name="victim_name" required minlength="2">
+          </div>
+          <div class="form-group">
+            <label for="victim_mobile">Mobile Number * (10 digits)</label>
+            <input type="tel" id="victim_mobile" name="victim_mobile" required pattern="[6-9][0-9]{9}" maxlength="10">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="victim_email">Email</label>
+          <input type="email" id="victim_email" name="victim_email">
+        </div>
+      </section>
+
+      <section class="form-section">
+        <h2>Address</h2>
+        <div class="form-group">
+          <label for="victim_address">Full Address</label>
+          <textarea id="victim_address" name="victim_address" rows="2"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="victim_city">City</label>
+            <input type="text" id="victim_city" name="victim_city">
+          </div>
+          <div class="form-group">
+            <label for="victim_state">State / UT</label>
+            <select id="victim_state" name="victim_state">
+              <option value="">Select state</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="victim_pin">PIN Code</label>
+          <input type="text" id="victim_pin" name="victim_pin" pattern="[0-9]{6}" maxlength="6">
+        </div>
+      </section>
+
+      <section class="form-section">
+        <h2>Incident Details</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="id_proof_type">ID Proof Type</label>
+            <select id="id_proof_type" name="id_proof_type">
+              <option value="Aadhaar">Aadhaar</option>
+              <option value="PAN">PAN</option>
+              <option value="Passport">Passport</option>
+              <option value="Voter ID">Voter ID</option>
+              <option value="Driving License">Driving License</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="id_proof_number">ID Proof Number</label>
+            <input type="text" id="id_proof_number" name="id_proof_number">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="incident_date">Incident Date</label>
+            <input type="date" id="incident_date" name="incident_date">
+          </div>
+          <div class="form-group">
+            <label for="incident_time">Incident Time</label>
+            <input type="time" id="incident_time" name="incident_time">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="amount_lost">Amount Lost (INR)</label>
+            <input type="number" id="amount_lost" name="amount_lost" min="0" step="0.01" value="0">
+          </div>
+          <div class="form-group">
+            <label for="payment_method">Payment Method</label>
+            <select id="payment_method" name="payment_method">
+              <option value="">Select</option>
+              <option value="UPI">UPI</option>
+              <option value="NEFT">NEFT</option>
+              <option value="RTGS">RTGS</option>
+              <option value="IMPS">IMPS</option>
+              <option value="Debit Card">Debit Card</option>
+              <option value="Credit Card">Credit Card</option>
+              <option value="Cash">Cash</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="incident_details">Incident Description *</label>
+          <textarea id="incident_details" name="incident_details" rows="5" required
+            placeholder="Describe what happened in detail…"></textarea>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <h2>Suspect Details</h2>
+        <p class="text-muted" style="font-size:0.8rem;margin-bottom:1rem">Pre-filled from scan when available</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="suspect_phone">Suspect Phone</label>
+            <input type="tel" id="suspect_phone" name="suspect_phone">
+          </div>
+          <div class="form-group">
+            <label for="suspect_upi">Suspect UPI ID</label>
+            <input type="text" id="suspect_upi" name="suspect_upi">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="suspect_website">Suspect Website / URL</label>
+          <input type="url" id="suspect_website" name="suspect_website">
+        </div>
+        <div class="form-group">
+          <label for="suspect_details">Additional Suspect Information</label>
+          <textarea id="suspect_details" name="suspect_details" rows="3"></textarea>
+        </div>
+      </section>
+
+      <button type="submit" class="btn-primary" id="btn-submit">Generate Complaint</button>
+    </form>
+
+    <div class="success-state" id="success-state">
+      <h2>✓ Complaint Generated Successfully</h2>
+      <p class="text-muted">Your 7-section police complaint is ready for download and filing at cybercrime.gov.in</p>
+      <button type="button" class="btn-primary" id="btn-download" style="max-width:320px;margin:1rem auto 0">
+        Download Complaint (.txt)
+      </button>
+    </div>
+  </main>
+
+  <div id="toast-container"></div>
+
+  <script src="/assets/app.js"></script>
+  <script>
+    const INDIAN_STATES = [
+      'Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa','Gujarat',
+      'Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala','Madhya Pradesh',
+      'Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Punjab',
+      'Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh',
+      'Uttarakhand','West Bengal','Andaman and Nicobar Islands','Chandigarh',
+      'Dadra and Nagar Haveli and Daman and Diu','Delhi','Jammu and Kashmir',
+      'Ladakh','Lakshadweep','Puducherry'
+    ];
+
+    const params = new URLSearchParams(window.location.search);
+    const scanId = params.get('scan_id') || '';
+    let reportId = null;
+
+    const stateSelect = document.getElementById('victim_state');
+    INDIAN_STATES.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s;
+      opt.textContent = s;
+      stateSelect.appendChild(opt);
+    });
+
+    document.getElementById('info-scan-id').textContent = scanId || 'Not linked';
+
+    async function loadScan() {
+      if (!scanId) return;
+      try {
+        const res = await Sentinel.api('/scan/' + encodeURIComponent(scanId));
+        const s = res.data;
+        document.getElementById('info-risk').textContent =
+          Math.round(s.risk_score || 0) + '% ' + (s.risk_level || '');
+        document.getElementById('info-category').textContent =
+          (s.category || '').replace(/_/g, ' ');
+        if (s.suspect_phone) document.getElementById('suspect_phone').value = s.suspect_phone;
+        if (s.suspect_upi) document.getElementById('suspect_upi').value = s.suspect_upi;
+        if (s.suspect_website) document.getElementById('suspect_website').value = s.suspect_website;
+        if (s.input_text && !document.getElementById('incident_details').value) {
+          document.getElementById('incident_details').value =
+            'Scam message analyzed by Your Sentinel:\n\n' + (s.input_text || '').slice(0, 2000);
+        }
+      } catch (e) {
+        console.warn('Scan load', e);
+      }
+    }
+
+    document.getElementById('report-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const mobile = document.getElementById('victim_mobile').value.replace(/\D/g, '');
+      if (mobile.length !== 10 || !/^[6-9]/.test(mobile)) {
+        Sentinel.showToast('Invalid mobile', 'Enter valid 10-digit Indian mobile number', 'HIGH');
+        return;
+      }
+      const btn = document.getElementById('btn-submit');
+      btn.disabled = true;
+      btn.textContent = 'Generating with AI 4 (Groq)…';
+      const payload = {
+        scan_id: scanId || 'SN-MANUAL',
+        victim_name: document.getElementById('victim_name').value,
+        victim_mobile: mobile,
+        victim_email: document.getElementById('victim_email').value || null,
+        victim_address: document.getElementById('victim_address').value || null,
+        victim_city: document.getElementById('victim_city').value || null,
+        victim_state: document.getElementById('victim_state').value || null,
+        victim_pin: document.getElementById('victim_pin').value || null,
+        id_proof_type: document.getElementById('id_proof_type').value || null,
+        id_proof_number: document.getElementById('id_proof_number').value || null,
+        incident_date: document.getElementById('incident_date').value || null,
+        incident_time: document.getElementById('incident_time').value || null,
+        amount_lost: parseFloat(document.getElementById('amount_lost').value) || 0,
+        payment_method: document.getElementById('payment_method').value || null,
+        incident_details: document.getElementById('incident_details').value,
+        suspect_phone: document.getElementById('suspect_phone').value || null,
+        suspect_upi: document.getElementById('suspect_upi').value || null,
+        suspect_website: document.getElementById('suspect_website').value || null,
+        suspect_details: document.getElementById('suspect_details').value || null,
+      };
+      try {
+        const res = await Sentinel.api('/report/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        reportId = res.data.report_id;
+        document.getElementById('report-form').style.display = 'none';
+        document.getElementById('success-state').classList.add('visible');
+        Sentinel.showToast('Success', 'Complaint generated — download ready', 'LOW');
+      } catch (err) {
+        Sentinel.showToast('Error', err.message, 'CRITICAL');
+        btn.disabled = false;
+        btn.textContent = 'Generate Complaint';
+      }
+    });
+
+    document.getElementById('btn-download').addEventListener('click', () => {
+      if (reportId) {
+        window.location.href = Sentinel.API_BASE + '/report/download/' + reportId;
+      }
+    });
+
+    loadScan();
+  </script>
+</body>
+</html>
