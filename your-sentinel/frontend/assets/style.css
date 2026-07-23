@@ -296,6 +296,8 @@ a:hover { color: var(--teal-500); }
 }
 .view.active {
   display: block;
+  opacity: 1;
+  transform: translateY(0);
 }
 .view.fade-in {
   opacity: 1;
