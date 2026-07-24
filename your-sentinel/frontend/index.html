@@ -159,14 +159,14 @@
   <script src="/assets/app.js"></script>
   <script>
     const PIPELINE_STEPS = [
-      'Extracting URLs from input',
-      'Checking URLs (Safe Browsing + VirusTotal)',
-      'Analyzing image with Gemini Vision',
-      'Running behaviour engine & mismatch detector',
-      'Deep text analysis with Gemini',
-      'Computing unified verdict',
-      'Preparing forensic narrative',
-      'Saving results & notifying',
+      'Extracting suspect URLs and domains',
+      'AI 1: Hugging Face (Scam Pattern Classification)',
+      'AI 2: Gemini Flash (OCR Screenshot Vision + Hinglish NLP Analysis)',
+      'AI 3: URL Threat Intel (Safe Browsing & VirusTotal Verification)',
+      'Running Behaviour Engine & Mismatch Detector checks',
+      'Blending AI outputs & Computing consensus verdict',
+      'AI 4: Groq Llama-3.1 (Preparing forensic narrative & legal template)',
+      'Saving scan record to Vault and notifying administrators',
     ];
 
     let lastScanId = null;
