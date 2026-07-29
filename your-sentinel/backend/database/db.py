@@ -294,6 +294,11 @@ async def get_report_by_scan(scan_id: str) -> Optional[Dict[str, Any]]:
                 scan_id,
             )
             return dict(row) if row else None
+    except Exception as exc:
+        logger.error("get_report_by_scan failed: %s", exc)
+        return None
+
+
 async def list_reports(limit: int = 100) -> List[Dict[str, Any]]:
     if not _pool:
         return []
