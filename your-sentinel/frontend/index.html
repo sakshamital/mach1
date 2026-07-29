@@ -17,8 +17,9 @@
       <nav class="nav-tabs" role="tablist">
         <button class="nav-tab active" data-view="scan">Scan</button>
         <button class="nav-tab" data-view="vault">Vault</button>
-        <button class="nav-tab" data-view="stats">Stats</button>
+        <button class="nav-tab" data-view="stats">Stats-Dashboard</button>
         <button class="nav-tab" data-view="news">News</button>
+        <button class="nav-tab" data-view="admin">Admin</button>
       </nav>
       <div class="status-pill">
         <span class="status-dot" id="status-dot"></span>
@@ -103,7 +104,6 @@
           <div class="card full-width"><h3>Forensic Report</h3><p id="card-forensic" style="font-size:0.9rem;line-height:1.7"></p></div>
         </div>
         <div style="display:flex;gap:0.75rem;margin-top:1rem;flex-wrap:wrap">
-          <button type="button" class="btn-secondary" id="btn-confirm-scam">Confirm as Scam (Community)</button>
           <button type="button" class="btn-secondary" id="btn-export-scan">Export TXT</button>
         </div>
       </div>
@@ -140,6 +140,54 @@
         <button class="filter-btn" data-severity="MODERATE">Moderate</button>
       </div>
       <div class="news-grid" id="news-grid"></div>
+    </section>
+    
+    <!-- ADMIN VIEW -->
+    <section id="view-admin" class="view">
+      <h1 style="font-family:var(--font-head);margin-bottom:1.5rem">Admin Control Panel</h1>
+      
+      <!-- Login Section -->
+      <div id="admin-login-card" class="card" style="max-width: 400px; margin: 2rem auto; padding: 2rem;">
+        <h3 style="margin-bottom: 1.5rem; text-align: center;">Admin Authorization</h3>
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <div>
+            <label for="admin-user" style="display: block; font-size: 0.85rem; margin-bottom: 0.25rem; color: var(--text-muted);">Username</label>
+            <input type="text" id="admin-user" placeholder="Enter username" style="width: 100%; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 0.5rem 0.75rem;" />
+          </div>
+          <div>
+            <label for="admin-pass" style="display: block; font-size: 0.85rem; margin-bottom: 0.25rem; color: var(--text-muted);">Password</label>
+            <input type="password" id="admin-pass" placeholder="Enter password" style="width: 100%; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 0.5rem 0.75rem;" />
+          </div>
+          <button type="button" class="btn-primary" id="btn-admin-login" style="margin-top: 0.5rem; width: 100%;">Access Panel</button>
+        </div>
+      </div>
+
+      <!-- Dashboard Panel Section -->
+      <div id="admin-dashboard" class="hidden">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <h3>User-Submitted Victim Reports</h3>
+          <button type="button" class="btn-secondary" id="btn-admin-logout">Logout</button>
+        </div>
+        <div style="overflow-x: auto; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border); color: var(--teal-400);">
+                <th style="padding: 0.75rem 0.5rem; border-bottom: 1px solid var(--border);">Report ID</th>
+                <th style="padding: 0.75rem 0.5rem; border-bottom: 1px solid var(--border);">Victim Details</th>
+                <th style="padding: 0.75rem 0.5rem; border-bottom: 1px solid var(--border);">Incident Details</th>
+                <th style="padding: 0.75rem 0.5rem; border-bottom: 1px solid var(--border);">Suspect Info</th>
+                <th style="padding: 0.75rem 0.5rem; border-bottom: 1px solid var(--border);">Date / Time</th>
+                <th style="padding: 0.75rem 0.5rem; border-bottom: 1px solid var(--border);">Amount</th>
+              </tr>
+            </thead>
+            <tbody id="admin-reports-table">
+              <tr>
+                <td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">No reports retrieved yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -341,19 +389,7 @@
       document.getElementById('upload-thumbnail').src = '';
     }
 
-    document.getElementById('btn-confirm-scam').addEventListener('click', async () => {
-      if (!lastScanId) return;
-      try {
-        await Sentinel.api('/confirm', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ scan_id: lastScanId, verdict: 'SCAM' }),
-        });
-        Sentinel.showToast('Thank you', 'Pattern added to community learning', 'LOW');
-      } catch (e) {
-        Sentinel.showToast('Error', e.message, 'HIGH');
-      }
-    });
+
 
     document.getElementById('btn-export-scan').addEventListener('click', () => {
       if (lastScanId) window.open(Sentinel.API_BASE + '/export/' + lastScanId, '_blank');
@@ -378,6 +414,7 @@
         if (view === 'vault') loadVault();
         if (view === 'stats') loadStats();
         if (view === 'news') loadNews();
+        if (view === 'admin') loadAdmin();
       });
     });
 
@@ -535,6 +572,92 @@
       } catch (e) {
         document.getElementById('ticker-track').innerHTML =
           '<span class="ticker-item">Your Sentinel — Free AI scam protection for India</span>';
+      }
+    }
+
+    // Admin View authorization & listing
+    let adminToken = sessionStorage.getItem('admin_token') || '';
+
+    function showAdminSection() {
+      const loginCard = document.getElementById('admin-login-card');
+      const dashboard = document.getElementById('admin-dashboard');
+      if (adminToken === 'sakshamital:purva_1234') {
+        loginCard.classList.add('hidden');
+        dashboard.classList.remove('hidden');
+        fetchAdminReports();
+      } else {
+        loginCard.classList.remove('hidden');
+        dashboard.classList.add('hidden');
+      }
+    }
+
+    function loadAdmin() {
+      showAdminSection();
+    }
+
+    document.getElementById('btn-admin-login').addEventListener('click', () => {
+      const user = document.getElementById('admin-user').value.trim();
+      const pass = document.getElementById('admin-pass').value.trim();
+      if (user === 'sakshamital' && pass === 'purva_1234') {
+        adminToken = 'sakshamital:purva_1234';
+        sessionStorage.setItem('admin_token', adminToken);
+        Sentinel.showToast('Login Successful', 'Welcome to Admin Control Panel', 'LOW');
+        showAdminSection();
+      } else {
+        Sentinel.showToast('Access Denied', 'Invalid credentials provided.', 'CRITICAL');
+      }
+    });
+
+    document.getElementById('btn-admin-logout').addEventListener('click', () => {
+      adminToken = '';
+      sessionStorage.removeItem('admin_token');
+      document.getElementById('admin-user').value = '';
+      document.getElementById('admin-pass').value = '';
+      Sentinel.showToast('Logged Out', 'Successfully logged out.', 'LOW');
+      showAdminSection();
+    });
+
+    async function fetchAdminReports() {
+      const tableBody = document.getElementById('admin-reports-table');
+      tableBody.innerHTML = '<tr><td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">Loading victim reports...</td></tr>';
+      try {
+        const res = await Sentinel.api('/admin/reports', {
+          headers: {
+            'Authorization': 'Basic ' + btoa(adminToken)
+          }
+        });
+        const reports = res.data || [];
+        if (!reports.length) {
+          tableBody.innerHTML = '<tr><td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">No reports submitted yet.</td></tr>';
+          return;
+        }
+        tableBody.innerHTML = reports.map(r => `
+          <tr style="border-bottom: 1px solid var(--border); vertical-align: top;">
+            <td style="padding: 0.75rem 0.5rem;" class="mono">${Sentinel.esc(r.report_id)}</td>
+            <td style="padding: 0.75rem 0.5rem;">
+              <strong>${Sentinel.esc(r.victim_name)}</strong><br/>
+              <span class="text-muted">${Sentinel.esc(r.victim_mobile)}</span><br/>
+              <span class="text-muted" style="font-size: 0.75rem;">${Sentinel.esc(r.victim_email || '')}</span>
+            </td>
+            <td style="padding: 0.75rem 0.5rem; max-width: 250px;">
+              <span style="font-weight: 500;">${Sentinel.esc(r.payment_method || 'N/A')}</span><br/>
+              <span style="font-size: 0.75rem; color: var(--text-muted); display: block; max-height: 4.5em; overflow: hidden; text-overflow: ellipsis;">${Sentinel.esc(r.incident_details || '')}</span>
+            </td>
+            <td style="padding: 0.75rem 0.5rem;">
+              \${r.suspect_phone ? \`Phone: \${Sentinel.esc(r.suspect_phone)}<br/>\` : ''}
+              \${r.suspect_upi ? \`UPI: \${Sentinel.esc(r.suspect_upi)}<br/>\` : ''}
+              \${r.suspect_website ? \`Web: <span class="mono">\${Sentinel.esc(r.suspect_website)}</span>\` : ''}
+            </td>
+            <td style="padding: 0.75rem 0.5rem;">
+              \${Sentinel.fmtTime(r.created_at)}
+            </td>
+            <td style="padding: 0.75rem 0.5rem;" class="mono">
+              ₹\${Number(r.amount_lost || 0).toLocaleString('en-IN')}
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        tableBody.innerHTML = \`<tr><td colspan="6" style="padding: 2rem; text-align: center; color: var(--critical);">Error loading reports: \${Sentinel.esc(e.message)}</td></tr>\`;
       }
     }
 

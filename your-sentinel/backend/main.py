@@ -29,6 +29,7 @@ from fastapi import (
     Form,
     HTTPException,
     Query,
+    Request,
     UploadFile,
     WebSocket,
     WebSocketDisconnect,
@@ -905,6 +906,35 @@ async def report_generate(req: ReportGenerateRequest):
     except Exception as exc:
         logger.error("Report generate failed: %s", exc, exc_info=True)
         raise HTTPException(status_code=500, detail=f"Failed to generate complaint: {str(exc)}")
+
+@app.get("/admin/reports")
+async def get_admin_reports(request: Request):
+    """
+    Admin control endpoint to retrieve victim reports.
+    Requires Basic authentication with username 'sakshamital' and password 'purva_1234'.
+    """
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Basic "):
+        raise HTTPException(status_code=401, detail="Unauthorized: Authentication required")
+    try:
+        import base64
+        encoded = auth_header.split(" ")[1]
+        decoded = base64.b64decode(encoded).decode("utf-8")
+        if decoded != "sakshamital:purva_1234":
+            raise HTTPException(status_code=401, detail="Unauthorized: Access denied")
+    except Exception:
+        raise HTTPException(status_code=401, detail="Unauthorized: Bad token")
+
+    if not db.get_pool():
+        raise HTTPException(status_code=503, detail="Database offline.")
+    
+    try:
+        reports = await db.list_reports(limit=100)
+        serialized = [_serialize_row(r) for r in reports]
+        return {"success": True, "data": serialized}
+    except Exception as exc:
+        logger.error("Admin reports fetch failed: %s", exc, exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to fetch reports from database")
 
 @app.get("/report/{report_id}", response_model=ReportRetrievalResponse)
 async def get_report_endpoint(report_id: str):

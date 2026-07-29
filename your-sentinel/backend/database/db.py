@@ -294,9 +294,19 @@ async def get_report_by_scan(scan_id: str) -> Optional[Dict[str, Any]]:
                 scan_id,
             )
             return dict(row) if row else None
+async def list_reports(limit: int = 100) -> List[Dict[str, Any]]:
+    if not _pool:
+        return []
+    try:
+        async with _pool.acquire() as conn:
+            rows = await conn.fetch(
+                "SELECT * FROM victim_reports ORDER BY created_at DESC LIMIT $1",
+                limit,
+            )
+            return [dict(r) for r in rows]
     except Exception as exc:
-        logger.error("get_report_by_scan failed: %s", exc)
-        return None
+        logger.error("list_reports failed: %s", exc)
+        return []
 
 
 # ---------------------------------------------------------------------------

@@ -65,11 +65,20 @@ class GeminiVision:
             mime_type = ImageProcessor.detect_mime(filename, mime)
             b64 = ImageProcessor.to_base64(image_bytes, mime_type)
             prompt = (
-                "You are a cybercrime detection AI for India. Analyze this screenshot/message image. "
-                "Return ONLY valid JSON with keys: risk_score (0-100), category (scam category id), "
-                "extracted_text (all visible text), language (en/hi/hinglish), "
-                "indicators (list of red flags), forensic_narrative (2-3 sentences), "
-                "is_scam (boolean). Focus on Indian scams: OTP, UPI, digital arrest, KYC, parcel."
+                "You are a highly accurate cybercrime detection and visual analysis AI for India. "
+                "Your goal is to inspect the uploaded image to determine if it is associated with a scam/fraud (such as OTP theft, fake UPI payments, digital arrest threats, KYC forgery, parcel scams, lotteries, fake customer care, etc.) or if it is a completely normal/benign image.\n\n"
+                "CRITICAL INSTRUCTIONS:\n"
+                "1. If the image is a NORMAL, BENIGN, or NON-SCAM image (e.g. standard photos, scenery, personal screenshots with no fraudulent context, non-scam documents, logos): "
+                "Set risk_score to a very low value (0 to 10), set is_scam to false, and set category to 'safe' or 'unknown'. In 'forensic_narrative', write a clear, helpful description of exactly what the image is (e.g., 'This is a logo of XYZ', 'This image depicts a scenic landscape', etc.) and state clearly that no fraudulent elements or scam patterns were detected.\n"
+                "2. If the image contains a SCAM, PHISHING, or FRAUDULENT element: "
+                "Set risk_score to a high value (50 to 100) based on severity, set is_scam to true. In 'forensic_narrative', provide a detailed breakdown including: "
+                "a) What type of scam is detected. "
+                "b) Precautions (what specific actions or details to avoid). "
+                "c) Steps on what to do next or how to verify/check this manually.\n\n"
+                "Return ONLY valid JSON with exactly these keys: "
+                "risk_score (float), category (string), extracted_text (string of all visible text), "
+                "language (string), indicators (list of strings representing red flags/observations), "
+                "forensic_narrative (string), is_scam (boolean)."
             )
             payload = {
                 "contents": [{
@@ -107,13 +116,22 @@ class GeminiVision:
                 ctx_parts.append(f"URL threats: {json.dumps(url_context)[:1000]}")
             context_block = "\n".join(ctx_parts) if ctx_parts else "No prior context."
             prompt = (
-                f"You are an Indian cybercrime forensic AI. Analyze this message for scams.\n"
+                f"You are an Indian cybercrime forensic and text analysis AI. Analyze this message/input for scams.\n"
                 f"Context from other AI modules:\n{context_block}\n\n"
                 f"Message to analyze:\n{text[:8000]}\n\n"
-                "Return ONLY valid JSON: risk_score (0-100), category (taxonomy id), "
-                "verdict (SCAM/SAFE/VERIFY), indicators (list), forensic_narrative (paragraph), "
-                "suspect_phone, suspect_upi, suspect_website (if found, else null), "
-                "language, confidence (0-100)."
+                "CRITICAL INSTRUCTIONS:\n"
+                "1. If the input is NOT a scam (benign conversational text, safe URLs, normal queries): "
+                "Set risk_score to a very low value (0 to 10), set verdict to 'SAFE'. In 'forensic_narrative', write a clear, helpful description of exactly what the text/URL is, and confirm that no malicious intents or scam patterns were identified.\n"
+                "2. If the input IS a scam (phishing links, fake government messages, lottery, threat calls, digital arrest details, bank verification fraud, etc.): "
+                "Set risk_score to a high value (50 to 100), set verdict to 'SCAM'. In 'forensic_narrative', provide a detailed breakdown containing: "
+                "a) The type of scam detected. "
+                "b) Precautions (what specific details or actions to avoid). "
+                "c) Actionable steps on what to do next or how to verify/check this manually.\n\n"
+                "Return ONLY valid JSON with exactly these keys: "
+                "risk_score (float 0-100), category (string), verdict (string: SCAM/SAFE/VERIFY), "
+                "indicators (list of strings), forensic_narrative (string), "
+                "suspect_phone (string or null), suspect_upi (string or null), suspect_website (string or null), "
+                "language (string), confidence (float 0-100)."
             )
             payload = {
                 "contents": [{"parts": [{"text": prompt}]}],
