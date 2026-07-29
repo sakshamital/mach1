@@ -147,9 +147,9 @@
 
     console.log(`Connecting WebSocket to: ${wsUrl}`);
     if (ws) {
-      try { ws.close(); } catch(e) {}
+      try { ws.close(); } catch (e) { }
     }
-    
+
     ws = new WebSocket(wsUrl);
 
     ws.onopen = function () {
@@ -171,7 +171,7 @@
           const d = payload.data;
           showPushToast(d.title || 'Notification', d.message || '', d.severity || 'MODERATE');
           updateNotifBadge(unreadCount + 1);
-          
+
           const panel = document.getElementById('notif-panel');
           if (panel && panel.classList.contains('open')) {
             loadNotifications();
@@ -200,7 +200,7 @@
     try {
       const res = await api('/notifications?limit=30');
       const items = res.data || [];
-      
+
       let unread = 0;
       if (items.length === 0) {
         list.innerHTML = '<li class="empty-state" style="padding:1.5rem; text-align:center; color:var(--text-muted); font-size:0.8rem;">No notifications</li>';
@@ -208,7 +208,7 @@
         list.innerHTML = items.map(n => {
           const isUnread = !n.is_read;
           if (isUnread) unread++;
-          
+
           let icon = 'ℹ️';
           if (n.severity === 'CRITICAL' || n.severity === 'HIGH') icon = '🚨';
           else if (n.severity === 'MODERATE') icon = '⚠️';
@@ -229,7 +229,7 @@
           `;
         }).join('');
       }
-      
+
       // Update unread badge count from the count endpoint for reliability
       const countRes = await api('/notifications/unread-count');
       updateNotifBadge(countRes.count ?? unread);
@@ -357,7 +357,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     checkHealth();
     connectWebSocket();
-    
+
     // Wire global click listener for mark all read if button exists
     const markAllBtn = document.getElementById('notif-mark-all');
     if (markAllBtn) {
