@@ -421,6 +421,8 @@ class SentinelBrain:
 
             final_score = min(round(score, 2), 100.0)
             verify_mode = local.get("family_impersonation", False) and 40 <= final_score < 75
+            if final_score < 20 and not verify_mode:
+                final_score = 0.0
             is_scam = final_score >= config.RISK_THRESHOLDS["moderate"]
             verdict = "VERIFY" if verify_mode else ("SCAM" if is_scam else "SAFE")
 

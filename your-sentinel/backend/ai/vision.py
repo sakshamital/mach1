@@ -179,7 +179,7 @@ class GeminiVision:
                 "risk_score": 45.0 if text else 20.0,
                 "category": "unknown",
                 "extracted_text": text,
-                "forensic_narrative": f"OCR extracted {len(text)} characters. Configure GEMINI_API_KEY for vision AI.",
+                "forensic_narrative": f"OCR extracted {len(text)} characters. Deep vision analysis is unavailable.",
                 "indicators": ["ocr_only"],
                 "is_scam": False,
             }
@@ -190,7 +190,7 @@ class GeminiVision:
                 "risk_score": 25.0,
                 "category": "unknown",
                 "extracted_text": "",
-                "forensic_narrative": "Image received. Enable Gemini API for full analysis.",
+                "forensic_narrative": "Image received. Deep vision analysis is unavailable.",
                 "indicators": [],
             }
 
@@ -218,7 +218,7 @@ class GeminiVision:
             "category": "unknown",
             "verdict": "SCAM" if score >= 50 else "SAFE",
             "indicators": indicators,
-            "forensic_narrative": "Local analysis performed. Configure GEMINI_API_KEY for deep AI analysis.",
+            "forensic_narrative": "Local analysis performed. Deep text analysis is unavailable.",
             "confidence": 40,
         }
 

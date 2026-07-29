@@ -2049,7 +2049,7 @@
         </div>
       </div>
       <div class="header-status">
-        <div class="status-dot" id="ai-status-indicator">AI CORE ONLINE</div>
+        <div class="status-dot" id="ai-status-indicator">SERVER LIVE</div>
         <div class="nav-links">
           <button class="nav-btn active" id="nav-scan" onclick="showView('scan',    this)">SCAN</button>
           <button class="nav-btn" id="nav-history" onclick="showView('history', this)">VAULT</button>
@@ -2422,7 +2422,7 @@ You can also paste a suspicious link, phone number, or describe what someone sai
         const json = await apiFetch('/health');
         const allAi = Object.values(json.ai_status || {}).some(Boolean);
         el.classList.remove('offline');
-        el.textContent = json.database ? 'AI CORE ONLINE' : 'AI ONLINE — DB DEGRADED';
+        el.textContent = json.database ? 'SERVER LIVE' : 'SERVER LIVE — DB DEGRADED';
       } catch {
         el.classList.add('offline');
         el.textContent = 'SERVER OFFLINE';

@@ -281,13 +281,10 @@
       const res = await api('/health');
       if (res && res.success) {
         dot.className = 'status-dot online';
-        const aiStatus = res.ai_status || {};
-        const totalAIs = Object.keys(aiStatus).length || 8;
-        const onlineAIs = Object.values(aiStatus).filter(Boolean).length;
-        label.textContent = `${onlineAIs}/${totalAIs} AI Active`;
+        label.textContent = 'SERVER LIVE';
       } else {
         dot.className = 'status-dot offline';
-        label.textContent = 'Degraded';
+        label.textContent = 'SERVER DEGRADED';
       }
     } catch (e) {
       dot.className = 'status-dot offline';
