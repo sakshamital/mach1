@@ -644,20 +644,20 @@
               <span style="font-size: 0.75rem; color: var(--text-muted); display: block; max-height: 4.5em; overflow: hidden; text-overflow: ellipsis;">${Sentinel.esc(r.incident_details || '')}</span>
             </td>
             <td style="padding: 0.75rem 0.5rem;">
-              \${r.suspect_phone ? \`Phone: \${Sentinel.esc(r.suspect_phone)}<br/>\` : ''}
-              \${r.suspect_upi ? \`UPI: \${Sentinel.esc(r.suspect_upi)}<br/>\` : ''}
-              \${r.suspect_website ? \`Web: <span class="mono">\${Sentinel.esc(r.suspect_website)}</span>\` : ''}
+              ${r.suspect_phone ? `Phone: ${Sentinel.esc(r.suspect_phone)}<br/>` : ''}
+              ${r.suspect_upi ? `UPI: ${Sentinel.esc(r.suspect_upi)}<br/>` : ''}
+              ${r.suspect_website ? `Web: <span class="mono">${Sentinel.esc(r.suspect_website)}</span>` : ''}
             </td>
             <td style="padding: 0.75rem 0.5rem;">
-              \${Sentinel.fmtTime(r.created_at)}
+              ${Sentinel.fmtTime(r.created_at)}
             </td>
             <td style="padding: 0.75rem 0.5rem;" class="mono">
-              ₹\${Number(r.amount_lost || 0).toLocaleString('en-IN')}
+              ₹${Number(r.amount_lost || 0).toLocaleString('en-IN')}
             </td>
           </tr>
         `).join('');
       } catch (e) {
-        tableBody.innerHTML = \`<tr><td colspan="6" style="padding: 2rem; text-align: center; color: var(--critical);">Error loading reports: \${Sentinel.esc(e.message)}</td></tr>\`;
+        tableBody.innerHTML = `<tr><td colspan="6" style="padding: 2rem; text-align: center; color: var(--critical);">Error loading reports: ${Sentinel.esc(e.message)}</td></tr>`;
       }
     }
 
