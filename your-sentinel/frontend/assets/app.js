@@ -12,7 +12,7 @@
     window.location.hostname === '127.0.0.1';
   const API_BASE = isLocal
     ? 'http://127.0.0.1:8000'
-    : window.location.protocol + '//' + window.location.hostname;
+    : window.location.origin;
 
   let ws = null;
   let unreadCount = 0;
@@ -291,7 +291,7 @@
       }
     } catch (e) {
       dot.className = 'status-dot offline';
-      label.textContent = 'Server Offline';
+      label.textContent = 'SERVER OFFLINE';
     }
   }
 

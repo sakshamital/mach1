@@ -901,10 +901,10 @@ You can also paste a suspicious link, phone number, or describe what someone sai
 
 <script>
   /* =====================================================================
-     CONFIG — matches backend Render deployment URL
+     CONFIG — use same origin as current page
   ===================================================================== */
-  const API_BASE = 'https://your-sentinel.onrender.com';
-  const WS_BASE  = 'wss://your-sentinel.onrender.com';
+  const API_BASE = window.location.origin;
+  const WS_BASE = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}`;
 
   /* =====================================================================
      UTILITIES
@@ -956,7 +956,7 @@ You can also paste a suspicious link, phone number, or describe what someone sai
       el.textContent = json.database ? 'AI CORE ONLINE' : 'AI ONLINE — DB DEGRADED';
     } catch {
       el.classList.add('offline');
-      el.textContent = 'BACKEND OFFLINE';
+      el.textContent = 'SERVER OFFLINE';
     }
   }
 
